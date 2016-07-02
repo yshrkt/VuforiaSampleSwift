@@ -38,3 +38,9 @@ do {
 ## ScreenShot
 
 ![screenshot](https://github.com/yshrkt/VuforiaSampleSwift/blob/master/screenshot.jpg)
+
+## Thanks
+
+I am referring to the following page.
+
+* [Making Augmented Reality app easily with Scenekit + Vuforia (in English)](http://qiita.com/akira108/items/a743138fca532ee193fe)
