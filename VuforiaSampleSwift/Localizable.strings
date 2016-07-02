@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  VuforiaSampleSwift
+
+  Created by Yoshihiro Kato on 2016/07/02.
+  Copyright © 2016年 Yoshihiro Kato. All rights reserved.
+*/
+
+"VUFORIA_ERROR_NO_NETWORK_TRANSIENT" = "Unable to contact server. Please try again later.";
+"VUFORIA_ERROR_NO_NETWORK_PERMANENT" = "No network available. Please make sure you are connected to the Internet.";
+"VUFORIA_ERROR_INVALID_KEY" = "Invalid Key used. Please make sure you are using a valid Vuforia App Key.";
+"VUFORIA_ERROR_CANCELED_KEY" = "This app license key has been canceled and may no longer be used. Please get a new license key.";
+"VUFORIA_ERROR_MISSING_KEY" = "Vuforia App key is missing. Please get a valid key, by logging into your account at developer.vuforia.com and creating a new project.";
+"VUFORIA_ERROR_PRODUCT_TYPE_MISMATCH" = "Vuforia App key is not valid for this product. Please get a valid key, by logging into your account at developer.vuforia.com and choosing the right product type during project creation.";
+"VUFORIA_ERROR_UNKNOWN" = "Initialization error";
