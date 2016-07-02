@@ -10,7 +10,7 @@ Vuforia sample code with SceneKit using Swift.
 
 ## Usage
 
-See ViewController.swift
+See ViewController.swift.
 
 ``` swift
 
@@ -37,4 +37,4 @@ do {
 
 ## ScreenShot
 
-![screenshot](https://raw.githubusercontent.com/yshrkt/VuforiaSampleSwift/snapshot.jpg)
+![screenshot](https://github.com/yshrkt/VuforiaSampleSwift/blob/master/screenshot.jpg)
