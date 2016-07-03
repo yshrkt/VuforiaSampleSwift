@@ -106,8 +106,16 @@ namespace {
         _licenseKey = licenseKey;
         _dataSetFile = path;
         instance = self;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveDidEnterBackgroundNotification:)
+                                                     name:UIApplicationDidEnterBackgroundNotification object:nil];
     }
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (VuforiaEAGLView*)eaglView {
@@ -117,19 +125,6 @@ namespace {
     }
     return _eaglView;
 }
-
-// Prepare the Vuforia SDK
-- (void) prepareWithOrientation:(UIInterfaceOrientation)orientation {
-    _isCameraActive = NO;
-    _isCameraStarted = NO;
-    _isRetinaDisplay = [self isRetinaDisplay];
-    _arViewOrientation = orientation;
-    
-    // Initialising Vuforia is a potentially lengthy operation, so perform it on a
-    // background thread
-    [self performSelectorInBackground:@selector(prepareInBackground) withObject:nil];
-}
-
 
 - (CGSize)preferredARFrameSize
 {
@@ -223,8 +218,6 @@ namespace {
     return nil;
 }
 
-#pragma mark
-
 // Determine whether the device has a retina display
 - (BOOL)isRetinaDisplay
 {
@@ -232,6 +225,18 @@ namespace {
     // displayLinkWithTarget:selector: and the scale property is larger than 1.0, then this
     // is a retina display
     return ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] && 1.0 < [UIScreen mainScreen].scale);
+}
+
+#pragma mark - Prepare
+- (void) prepareWithOrientation:(UIInterfaceOrientation)orientation {
+    _isCameraActive = NO;
+    _isCameraStarted = NO;
+    _isRetinaDisplay = [self isRetinaDisplay];
+    _arViewOrientation = orientation;
+    
+    // Initialising Vuforia is a potentially lengthy operation, so perform it on a
+    // background thread
+    [self performSelectorInBackground:@selector(prepareInBackground) withObject:nil];
 }
 
 // Setup Vuforia
@@ -294,56 +299,6 @@ namespace {
     }
 }
 
-// Resume Vuforia
-- (BOOL)resume:(NSError **)error {
-    Vuforia::onResume();
-    
-    // if the camera was previously started, but not currently active, then
-    // we restart it
-    if ((_isCameraStarted) && (! _isCameraActive)) {
-        
-        // initialize the camera
-        if (! Vuforia::CameraDevice::getInstance().init(mCamera)) {
-            [self buildErrorWithCode:VuforiaError_InitializingCamera error:error];
-            return NO;
-        }
-        
-        // start the camera
-        if (!Vuforia::CameraDevice::getInstance().start()) {
-            [self buildErrorWithCode:VuforiaError_StartingCamera error:error];
-            return NO;
-        }
-        
-        _isCameraActive = YES;
-    }
-    return YES;
-}
-
-
-// Pause Vuforia
-- (BOOL)pause:(NSError **)error {
-    if (_isCameraActive) {
-        // Stop and deinit the camera
-        if(! Vuforia::CameraDevice::getInstance().stop()) {
-            [self buildErrorWithCode:VuforiaError_StoppingCamera error:error];
-            return NO;
-        }
-        if(! Vuforia::CameraDevice::getInstance().deinit()) {
-            [self buildErrorWithCode:VuforiaError_DeinitCamara error:error];
-            return NO;
-        }
-        _isCameraActive = NO;
-    }
-    Vuforia::onPause();
-    return YES;
-}
-
-- (void) Vuforia_onUpdate:(Vuforia::State *) state {
-    if ((self.delegate != nil) && [self.delegate respondsToSelector:@selector(vuforiaManager:didUpdateWithState:)]) {
-        [self.delegate vuforiaManager:self didUpdateWithState:[[VuforiaState alloc] initWithState:state]];
-    }
-}
-
 - (void)prepareAR  {
     // we register for the Vuforia callback
     Vuforia::registerCallback(&vuforiaUpdate);
@@ -390,8 +345,6 @@ namespace {
     
     [self initTracker];
 }
-
-#pragma mark - prepare tracker
 
 - (void)initTracker {
     Vuforia::TrackerManager& trackerManager = Vuforia::TrackerManager::getInstance();
@@ -705,7 +658,7 @@ namespace {
     Vuforia::Renderer::getInstance().setVideoBackgroundConfig(config);
 }
 
-#pragma mark Start
+#pragma mark - Start
 - (BOOL)start:(NSError **)error {
     Vuforia::CameraDevice::CAMERA_DIRECTION camera = _frontCameraEnabled ? Vuforia::CameraDevice::CAMERA_DIRECTION_FRONT : Vuforia::CameraDevice::CAMERA_DIRECTION_BACK;
     
@@ -773,7 +726,7 @@ namespace {
     return YES;
 }
 
-#pragma mark Stop
+#pragma mark - Stop
 // Stop Vuforia camera
 - (BOOL)stop:(NSError **)error {
     // Stop the camera
@@ -859,6 +812,63 @@ namespace {
     }
     
     return YES;
+}
+
+#pragma mark - Resume
+- (BOOL)resume:(NSError **)error {
+    Vuforia::onResume();
+    
+    // if the camera was previously started, but not currently active, then
+    // we restart it
+    if ((_isCameraStarted) && (! _isCameraActive)) {
+        
+        // initialize the camera
+        if (! Vuforia::CameraDevice::getInstance().init(mCamera)) {
+            [self buildErrorWithCode:VuforiaError_InitializingCamera error:error];
+            return NO;
+        }
+        
+        // start the camera
+        if (!Vuforia::CameraDevice::getInstance().start()) {
+            [self buildErrorWithCode:VuforiaError_StartingCamera error:error];
+            return NO;
+        }
+        
+        _isCameraActive = YES;
+    }
+    return YES;
+}
+
+
+#pragma mark - Pause
+- (BOOL)pause:(NSError **)error {
+    if (_isCameraActive) {
+        // Stop and deinit the camera
+        if(! Vuforia::CameraDevice::getInstance().stop()) {
+            [self buildErrorWithCode:VuforiaError_StoppingCamera error:error];
+            return NO;
+        }
+        if(! Vuforia::CameraDevice::getInstance().deinit()) {
+            [self buildErrorWithCode:VuforiaError_DeinitCamara error:error];
+            return NO;
+        }
+        _isCameraActive = NO;
+    }
+    Vuforia::onPause();
+    return YES;
+}
+
+#pragma mark - 
+- (void)didReceiveDidEnterBackgroundNotification:(NSNotification*)notification {
+    [_eaglView freeOpenGLESResources];
+    [_eaglView finishOpenGLESCommands];
+}
+
+#pragma mark - Vuforia Callback
+- (void) Vuforia_onUpdate:(Vuforia::State *) state {
+    if ((self.delegate != nil) && [self.delegate respondsToSelector:@selector(vuforiaManager:didUpdateWithState:)]) {
+        [self.delegate vuforiaManager:self didUpdateWithState:[[VuforiaState alloc] initWithState:state]];
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

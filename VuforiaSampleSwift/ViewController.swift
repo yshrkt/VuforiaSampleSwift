@@ -133,6 +133,16 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         
         boxMaterial.diffuse.contents = UIColor.lightGrayColor()
         
+        let planeNode = SCNNode()
+        planeNode.name = "plane"
+        planeNode.geometry = SCNPlane(width: 247.0/view.objectScale, height: 173.0/view.objectScale)
+        planeNode.position = SCNVector3Make(0, 0, -1)
+        let planeMaterial = SCNMaterial()
+        planeMaterial.diffuse.contents = UIColor.greenColor()
+        planeMaterial.transparency = 0.6
+        planeNode.geometry?.firstMaterial = planeMaterial
+        scene.rootNode.addChildNode(planeNode)
+        
         let boxNode = SCNNode()
         boxNode.name = "box"
         boxNode.geometry = SCNBox(width:1, height:1, length:1, chamferRadius:0.0)

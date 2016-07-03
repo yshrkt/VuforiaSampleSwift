@@ -33,7 +33,6 @@
 		92AA117B1D27A67C00E56CBE /* frame-markers-transparent.zip in Resources */ = {isa = PBXBuildFile; fileRef = 92AA111C1D27A67B00E56CBE /* frame-markers-transparent.zip */; };
 		92AA117C1D27A67C00E56CBE /* libVuforia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AA11751D27A67C00E56CBE /* libVuforia.a */; };
 		92AA117D1D27A67C00E56CBE /* license_3rdpartynotice.txt in Resources */ = {isa = PBXBuildFile; fileRef = 92AA11771D27A67C00E56CBE /* license_3rdpartynotice.txt */; };
-		92AA117E1D27A67C00E56CBE /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 92AA11781D27A67C00E56CBE /* readme.txt */; };
 		92AA117F1D27A67C00E56CBE /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 92AA117A1D27A67C00E56CBE /* readme.txt */; };
 		92AA11851D27B96300E56CBE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92AA11841D27B96300E56CBE /* Localizable.strings */; };
 /* End PBXBuildFile section */
@@ -484,7 +483,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92AA117E1D27A67C00E56CBE /* readme.txt in Resources */,
 				927B76F61D28070D00C4F5CC /* IT_about.html in Resources */,
 				92AA11131D27A5EB00E56CBE /* LaunchScreen.storyboard in Resources */,
 				927B76FA1D28070D00C4F5CC /* Tarmac.xml in Resources */,
