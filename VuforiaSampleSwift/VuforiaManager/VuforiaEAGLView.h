@@ -17,7 +17,7 @@
 
 @protocol VuforiaEAGLViewSceneSource <NSObject>
 
-- (SCNScene *)sceneForEAGLView:(VuforiaEAGLView *)view;
+- (SCNScene *)sceneForEAGLView:(VuforiaEAGLView *)view userInfo:(NSDictionary<NSString*, id>*)userInfo;
 
 @end
 
@@ -41,6 +41,7 @@
 - (id)initWithFrame:(CGRect)frame manager:(VuforiaManager *) manager;
 
 - (void)setupRenderer;
+- (void)setNeedsChangeSceneWithUserInfo: (NSDictionary*)userInfo;
 
 - (void)finishOpenGLESCommands;
 - (void)freeOpenGLESResources;

@@ -9,6 +9,7 @@
 #import "VuforiaEAGLView.h"
 
 #import <SceneKit/SceneKit.h>
+#import <SpriteKit/SpriteKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
@@ -110,6 +111,8 @@ namespace VuforiaEAGLViewUtils
     CFAbsoluteTime _startTime; // Start Time
     
     SCNNode* _currentTouchNode;
+    
+    SCNMatrix4 _projectionTransform;
 }
 
 // You must implement this method, which ensures the view's underlying layer is
@@ -168,15 +171,25 @@ namespace VuforiaEAGLViewUtils
     _renderer.showsStatistics = YES;
     
     if (_sceneSource != nil) {
-        _renderer.scene = [self.sceneSource sceneForEAGLView:self];
-        
-        SCNCamera* camera = [SCNCamera camera];
-        _cameraNode = [SCNNode node];
-        _cameraNode.camera = camera;
-        [_renderer.scene.rootNode addChildNode:_cameraNode];
-        _renderer.pointOfView = _cameraNode;
+        [self setNeedsChangeSceneWithUserInfo:nil];
     }
     
+}
+
+- (void)setNeedsChangeSceneWithUserInfo: (NSDictionary*)userInfo {
+    SCNScene* scene = [self.sceneSource sceneForEAGLView:self userInfo:userInfo];
+    if (scene == nil) {
+        return;
+    }
+    
+    SCNCamera* camera = [SCNCamera camera];
+    _cameraNode = [SCNNode node];
+    _cameraNode.camera = camera;
+    _cameraNode.camera.projectionTransform = _projectionTransform;
+    [scene.rootNode addChildNode:_cameraNode];
+    
+    _renderer.scene = scene;
+    _renderer.pointOfView = _cameraNode;
 }
 
 
@@ -226,7 +239,8 @@ namespace VuforiaEAGLViewUtils
 }
 
 - (void)setProjectionMatrix:(Vuforia::Matrix44F)matrix {
-    _cameraNode.camera.projectionTransform = [self SCNMatrix4FromVuforiaMatrix44:matrix];
+    _projectionTransform = [self SCNMatrix4FromVuforiaMatrix44:matrix];
+    _cameraNode.camera.projectionTransform = _projectionTransform;
 }
 
 //------------------------------------------------------------------------------

@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var vuforiaManager: VuforiaManager? = nil
     
     let boxMaterial = SCNMaterial()
+    private var lastSceneName: String? = nil
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -118,8 +119,18 @@ extension ViewController: VuforiaManagerDelegate {
             //print("\(trackerableName)")
             if trackerableName == "stones" {
                 boxMaterial.diffuse.contents = UIColor.redColor()
+                
+                if lastSceneName != "stones" {
+                    manager.eaglView.setNeedsChangeSceneWithUserInfo(["scene" : "stones"])
+                    lastSceneName = "stones"
+                }
             }else {
                 boxMaterial.diffuse.contents = UIColor.blueColor()
+                
+                if lastSceneName != "chips" {
+                    manager.eaglView.setNeedsChangeSceneWithUserInfo(["scene" : "chips"])
+                    lastSceneName = "chips"
+                }
             }
             
         }
@@ -128,7 +139,23 @@ extension ViewController: VuforiaManagerDelegate {
 
 extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
     
-    func sceneForEAGLView(view: VuforiaEAGLView) -> SCNScene {
+    func sceneForEAGLView(view: VuforiaEAGLView!, userInfo: [String : AnyObject]?) -> SCNScene! {
+        guard let userInfo = userInfo else {
+            print("default scene")
+            return createStonesScene(with: view)
+        }
+        
+        if let sceneName = userInfo["scene"] as? String where sceneName == "stones" {
+            print("stones scene")
+            return createStonesScene(with: view)
+        }else {
+            print("chips scene")
+            return createChipsScene(with: view)
+        }
+        
+    }
+    
+    private func createStonesScene(with view: VuforiaEAGLView) -> SCNScene {
         let scene = SCNScene()
         
         boxMaterial.diffuse.contents = UIColor.lightGrayColor()
@@ -151,6 +178,31 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         
         return scene
     }
+    
+    private func createChipsScene(with view: VuforiaEAGLView) -> SCNScene {
+        let scene = SCNScene()
+        
+        boxMaterial.diffuse.contents = UIColor.lightGrayColor()
+        
+        let planeNode = SCNNode()
+        planeNode.name = "plane"
+        planeNode.geometry = SCNPlane(width: 247.0/view.objectScale, height: 173.0/view.objectScale)
+        planeNode.position = SCNVector3Make(0, 0, -1)
+        let planeMaterial = SCNMaterial()
+        planeMaterial.diffuse.contents = UIColor.redColor()
+        planeMaterial.transparency = 0.6
+        planeNode.geometry?.firstMaterial = planeMaterial
+        scene.rootNode.addChildNode(planeNode)
+        
+        let boxNode = SCNNode()
+        boxNode.name = "box"
+        boxNode.geometry = SCNBox(width:1, height:1, length:1, chamferRadius:0.0)
+        boxNode.geometry?.firstMaterial = boxMaterial
+        scene.rootNode.addChildNode(boxNode)
+        
+        return scene
+    }
+    
     
     func vuforiaEAGLView(view: VuforiaEAGLView!, didTouchDownNode node: SCNNode!) {
         print("touch down \(node.name)\n")
