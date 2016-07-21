@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		926096D41D4163B600510C24 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926096D31D4163B600510C24 /* SpriteKit.framework */; };
 		927B76D71D27FDC600C4F5CC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927B76D41D27FDC600C4F5CC /* AVFoundation.framework */; };
 		927B76D81D27FDC600C4F5CC /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927B76D51D27FDC600C4F5CC /* CoreMotion.framework */; };
 		927B76DB1D27FDE500C4F5CC /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927B76D91D27FDE500C4F5CC /* SceneKit.framework */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		926096D31D4163B600510C24 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		927B76D31D27FDC600C4F5CC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		927B76D41D27FDC600C4F5CC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		927B76D51D27FDC600C4F5CC /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -164,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				926096D41D4163B600510C24 /* SpriteKit.framework in Frameworks */,
 				927B770B1D282E0A00C4F5CC /* MediaPlayer.framework in Frameworks */,
 				927B77091D282DF100C4F5CC /* AudioToolbox.framework in Frameworks */,
 				927B77081D2824AB00C4F5CC /* OpenGLES.framework in Frameworks */,
@@ -182,6 +185,8 @@
 		927B76DF1D27FE5900C4F5CC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				926096D31D4163B600510C24 /* SpriteKit.framework */,
+				927B770A1D282E0A00C4F5CC /* MediaPlayer.framework */,
 				927B77071D2824AB00C4F5CC /* OpenGLES.framework */,
 				927B76DD1D27FE0500C4F5CC /* CoreMedia.framework */,
 				927B76D91D27FDE500C4F5CC /* SceneKit.framework */,
@@ -233,7 +238,6 @@
 		92AA10FC1D27A5EB00E56CBE = {
 			isa = PBXGroup;
 			children = (
-				927B770A1D282E0A00C4F5CC /* MediaPlayer.framework */,
 				92AA11071D27A5EB00E56CBE /* VuforiaSampleSwift */,
 				92AA11061D27A5EB00E56CBE /* Products */,
 			);
