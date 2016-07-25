@@ -746,11 +746,9 @@ namespace {
     
     // Unload TrackersData
     [self deactivateDataSet: _dataSet];
-    _dataSet = nil;
-    
-    Vuforia::TrackerManager& trackerManager = Vuforia::TrackerManager::getInstance();
     
     // Get the image tracker:
+    Vuforia::TrackerManager& trackerManager = Vuforia::TrackerManager::getInstance();
     Vuforia::ObjectTracker* objectTracker = static_cast<Vuforia::ObjectTracker*>(trackerManager.getTracker(Vuforia::ObjectTracker::getClassType()));
     
     // Destroy the data sets:
@@ -758,10 +756,11 @@ namespace {
     {
         NSLog(@"Failed to destroy data set");
         [self buildErrorWithCode:VuforiaError_UnloadingTrackersData error:error];
-        return NO;
+    }else {
+        NSLog(@"datasets destroyed");
     }
     
-    NSLog(@"datasets destroyed");
+    _dataSet = nil;
     
     // Deinit Trackers
     trackerManager.deinitTracker(Vuforia::ObjectTracker::getClassType());
