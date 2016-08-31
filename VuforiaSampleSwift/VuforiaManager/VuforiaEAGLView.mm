@@ -311,7 +311,7 @@ namespace VuforiaEAGLViewUtils
     CGPoint pos = [touches.anyObject locationInView:self];
     pos.x *= [[UIScreen mainScreen] nativeScale];
     pos.y *= [[UIScreen mainScreen] nativeScale];
-    pos.y = _manager.viewport.size.height - pos.y;
+    pos.y = _manager.viewport.size.height + _manager.viewport.origin.y - pos.y;
     NSArray* results = [_renderer hitTest:pos options:nil];
     SCNNode* result = [[results firstObject] node];
     if(result){
@@ -333,7 +333,7 @@ namespace VuforiaEAGLViewUtils
     CGPoint pos = [touches.anyObject locationInView:self];
     pos.x *= [[UIScreen mainScreen] nativeScale];
     pos.y *= [[UIScreen mainScreen] nativeScale];
-    pos.y = _manager.viewport.size.height - pos.y;
+    pos.y = _manager.viewport.size.height + _manager.viewport.origin.y - pos.y;
     NSArray* results = [_renderer hitTest:pos options:nil];
     SCNNode* result = [[results firstObject] node];
     if(_currentTouchNode == result){
