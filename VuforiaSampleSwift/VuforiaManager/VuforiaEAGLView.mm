@@ -306,14 +306,18 @@ namespace VuforiaEAGLViewUtils
 }
 
 #pragma mark Touch Evnets
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    CGPoint pos = [touches.anyObject locationInView:self];
+- (SCNNode*)touchedNodeWithLocationInView:(CGPoint)location {
+    CGPoint pos = location;
     pos.x *= [[UIScreen mainScreen] nativeScale];
     pos.y *= [[UIScreen mainScreen] nativeScale];
     pos.y = _manager.viewport.size.height + _manager.viewport.origin.y - pos.y;
     NSArray* results = [_renderer hitTest:pos options:nil];
-    SCNNode* result = [[results firstObject] node];
+    return [[results firstObject] node];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    CGPoint pos = [touches.anyObject locationInView:self];
+    SCNNode* result = [self touchedNodeWithLocationInView:pos];
     if(result){
         _currentTouchNode = result;
         [self.delegate vuforiaEAGLView:self didTouchDownNode:result];
@@ -331,11 +335,7 @@ namespace VuforiaEAGLViewUtils
     }
     
     CGPoint pos = [touches.anyObject locationInView:self];
-    pos.x *= [[UIScreen mainScreen] nativeScale];
-    pos.y *= [[UIScreen mainScreen] nativeScale];
-    pos.y = _manager.viewport.size.height + _manager.viewport.origin.y - pos.y;
-    NSArray* results = [_renderer hitTest:pos options:nil];
-    SCNNode* result = [[results firstObject] node];
+    SCNNode* result = [self touchedNodeWithLocationInView:pos];
     if(_currentTouchNode == result){
         [self.delegate vuforiaEAGLView:self didTouchUpNode:result];
     }else {
