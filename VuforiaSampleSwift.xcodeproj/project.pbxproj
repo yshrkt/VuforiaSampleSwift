@@ -662,7 +662,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sputnik-apps.VuforiaSampleSwift";
 				PRODUCT_NAME = VuforiaSampleSwift;
-				SWIFT_OBJC_BRIDGING_HEADER = "VuforiaSampleSwift/VuforiaSample-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "VuforiaSampleSwift/VuforiaSampleSwift-Bridging-Header.h";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
