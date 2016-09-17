@@ -168,7 +168,6 @@ namespace VuforiaEAGLViewUtils
     _renderer = [SCNRenderer rendererWithContext:_context options:nil];
     _renderer.autoenablesDefaultLighting = YES;
     _renderer.playing = YES;
-    _renderer.showsStatistics = YES;
     
     if (_sceneSource != nil) {
         [self setNeedsChangeSceneWithUserInfo:nil];
