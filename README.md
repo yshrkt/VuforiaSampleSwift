@@ -4,18 +4,22 @@ Vuforia sample code with SceneKit using Swift.
 
 ## Requirement
 
-* Xcode 7.3.1
-* iOS 9.3.2
-* Vuforia SDK for iOS v5.5.9
+* Xcode 8
+* iOS 9.3
+* Vuforia SDK for iOS v6.0.112
 
 ## Setup
 
-* Download Vuforia SDK for iOS.
+* Download Vuforia SDK for iOS.  
+  [Vuforia SDK](https://developer.vuforia.com/downloads/sdk)
 * Put the SDK on your path as like bellow:  
-  `VuforiaSampleSwift/VuforiaSampleSwift/vuforia-sdk-ios-5-5-9`
+  `VuforiaSampleSwift/VuforiaSampleSwift/vuforia-sdk-ios-6-0-112`
+* Download Vuforiat Sample Targets.  
+  [Vuforiat Sample](https://developer.vuforia.com/downloads/samples)
 * Put your targets on your path as like bellow:  
   `VuforiaSampleSwift/VuforiaSampleSwift/VuforiaAssets/ImageTargets`
-* If you needs to fix to links to these files in project, fix it.
+* If you needs to fix to links to these files and settings in project, fix it.  
+  If you failed to build, check `Header Search Paths` and `Libarary Search Paths` in Build Settings.
 * Set your `lincenseKey` and `dataSetFile` in ViewController.swift.
 
 
