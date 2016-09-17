@@ -16,10 +16,10 @@ class ViewController: UIViewController {
     var vuforiaManager: VuforiaManager? = nil
     
     let boxMaterial = SCNMaterial()
-    private var lastSceneName: String? = nil
+    fileprivate var lastSceneName: String? = nil
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -33,11 +33,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         do {
@@ -59,14 +59,14 @@ private extension ViewController {
             self.view = manager.eaglView
         }
         
-        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(didRecieveWillResignActiveNotification),
-                                       name: UIApplicationWillResignActiveNotification, object: nil)
+                                       name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         
         notificationCenter.addObserver(self, selector: #selector(didRecieveDidBecomeActiveNotification),
-                                       name: UIApplicationDidBecomeActiveNotification, object: nil)
+                                       name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
-        vuforiaManager?.prepareWithOrientation(.Portrait)
+        vuforiaManager?.prepare(with: .portrait)
     }
     
     func pause() {
@@ -87,17 +87,17 @@ private extension ViewController {
 }
 
 extension ViewController {
-    func didRecieveWillResignActiveNotification(notification: NSNotification) {
+    func didRecieveWillResignActiveNotification(_ notification: Notification) {
         pause()
     }
     
-    func didRecieveDidBecomeActiveNotification(notification: NSNotification) {
+    func didRecieveDidBecomeActiveNotification(_ notification: Notification) {
         resume()
     }
 }
 
 extension ViewController: VuforiaManagerDelegate {
-    func vuforiaManagerDidFinishPreparing(manager: VuforiaManager!) {
+    func vuforiaManagerDidFinishPreparing(_ manager: VuforiaManager!) {
         print("did finish preparing\n")
         
         do {
@@ -108,24 +108,24 @@ extension ViewController: VuforiaManagerDelegate {
         }
     }
     
-    func vuforiaManager(manager: VuforiaManager!, didFailToPreparingWithError error: NSError!) {
+    func vuforiaManager(_ manager: VuforiaManager!, didFailToPreparingWithError error: Error!) {
         print("did faid to preparing \(error)\n")
     }
     
-    func vuforiaManager(manager: VuforiaManager!, didUpdateWithState state: VuforiaState!) {
+    func vuforiaManager(_ manager: VuforiaManager!, didUpdateWith state: VuforiaState!) {
         for index in 0 ..< state.numberOfTrackableResults {
-            let result = state.trackableResultAtIndex(index)
-            let trackerableName = result.trackable.name
+            let result = state.trackableResult(at: index)
+            let trackerableName = result?.trackable.name
             //print("\(trackerableName)")
             if trackerableName == "stones" {
-                boxMaterial.diffuse.contents = UIColor.redColor()
+                boxMaterial.diffuse.contents = UIColor.red
                 
                 if lastSceneName != "stones" {
                     manager.eaglView.setNeedsChangeSceneWithUserInfo(["scene" : "stones"])
                     lastSceneName = "stones"
                 }
             }else {
-                boxMaterial.diffuse.contents = UIColor.blueColor()
+                boxMaterial.diffuse.contents = UIColor.blue
                 
                 if lastSceneName != "chips" {
                     manager.eaglView.setNeedsChangeSceneWithUserInfo(["scene" : "chips"])
@@ -139,13 +139,13 @@ extension ViewController: VuforiaManagerDelegate {
 
 extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
     
-    func sceneForEAGLView(view: VuforiaEAGLView!, userInfo: [String : AnyObject]?) -> SCNScene! {
+    func scene(for view: VuforiaEAGLView!, userInfo: [String : Any]?) -> SCNScene! {
         guard let userInfo = userInfo else {
             print("default scene")
             return createStonesScene(with: view)
         }
         
-        if let sceneName = userInfo["scene"] as? String where sceneName == "stones" {
+        if let sceneName = userInfo["scene"] as? String , sceneName == "stones" {
             print("stones scene")
             return createStonesScene(with: view)
         }else {
@@ -155,17 +155,17 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         
     }
     
-    private func createStonesScene(with view: VuforiaEAGLView) -> SCNScene {
+    fileprivate func createStonesScene(with view: VuforiaEAGLView) -> SCNScene {
         let scene = SCNScene()
         
-        boxMaterial.diffuse.contents = UIColor.lightGrayColor()
+        boxMaterial.diffuse.contents = UIColor.lightGray
         
         let planeNode = SCNNode()
         planeNode.name = "plane"
         planeNode.geometry = SCNPlane(width: 247.0/view.objectScale, height: 173.0/view.objectScale)
         planeNode.position = SCNVector3Make(0, 0, -1)
         let planeMaterial = SCNMaterial()
-        planeMaterial.diffuse.contents = UIColor.greenColor()
+        planeMaterial.diffuse.contents = UIColor.green
         planeMaterial.transparency = 0.6
         planeNode.geometry?.firstMaterial = planeMaterial
         scene.rootNode.addChildNode(planeNode)
@@ -179,17 +179,17 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         return scene
     }
     
-    private func createChipsScene(with view: VuforiaEAGLView) -> SCNScene {
+    fileprivate func createChipsScene(with view: VuforiaEAGLView) -> SCNScene {
         let scene = SCNScene()
         
-        boxMaterial.diffuse.contents = UIColor.lightGrayColor()
+        boxMaterial.diffuse.contents = UIColor.lightGray
         
         let planeNode = SCNNode()
         planeNode.name = "plane"
         planeNode.geometry = SCNPlane(width: 247.0/view.objectScale, height: 173.0/view.objectScale)
         planeNode.position = SCNVector3Make(0, 0, -1)
         let planeMaterial = SCNMaterial()
-        planeMaterial.diffuse.contents = UIColor.redColor()
+        planeMaterial.diffuse.contents = UIColor.red
         planeMaterial.transparency = 0.6
         planeNode.geometry?.firstMaterial = planeMaterial
         scene.rootNode.addChildNode(planeNode)
@@ -203,18 +203,17 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         return scene
     }
     
-    
-    func vuforiaEAGLView(view: VuforiaEAGLView!, didTouchDownNode node: SCNNode!) {
+    func vuforiaEAGLView(_ view: VuforiaEAGLView!, didTouchDownNode node: SCNNode!) {
         print("touch down \(node.name)\n")
         boxMaterial.transparency = 0.6
     }
     
-    func vuforiaEAGLView(view: VuforiaEAGLView!, didTouchUpNode node: SCNNode!) {
+    func vuforiaEAGLView(_ view: VuforiaEAGLView!, didTouchUp node: SCNNode!) {
         print("touch up \(node.name)\n")
         boxMaterial.transparency = 1.0
     }
     
-    func vuforiaEAGLView(view: VuforiaEAGLView!, didTouchCancelNode node: SCNNode!) {
+    func vuforiaEAGLView(_ view: VuforiaEAGLView!, didTouchCancel node: SCNNode!) {
         print("touch cancel \(node.name)\n")
         boxMaterial.transparency = 1.0
     }
