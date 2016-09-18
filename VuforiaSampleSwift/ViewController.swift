@@ -160,6 +160,19 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         
         boxMaterial.diffuse.contents = UIColor.lightGray
         
+        let lightNode = SCNNode()
+        lightNode.light = SCNLight()
+        lightNode.light?.type = .omni
+        lightNode.light?.color = UIColor.lightGray
+        lightNode.position = SCNVector3(x:0, y:10, z:10)
+        scene.rootNode.addChildNode(lightNode)
+        
+        let ambientLightNode = SCNNode()
+        ambientLightNode.light = SCNLight()
+        ambientLightNode.light?.type = .ambient
+        ambientLightNode.light?.color = UIColor.darkGray
+        scene.rootNode.addChildNode(ambientLightNode)
+        
         let planeNode = SCNNode()
         planeNode.name = "plane"
         planeNode.geometry = SCNPlane(width: 247.0/view.objectScale, height: 173.0/view.objectScale)
@@ -183,6 +196,19 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         let scene = SCNScene()
         
         boxMaterial.diffuse.contents = UIColor.lightGray
+        
+        let lightNode = SCNNode()
+        lightNode.light = SCNLight()
+        lightNode.light?.type = .omni
+        lightNode.light?.color = UIColor.lightGray
+        lightNode.position = SCNVector3(x:0, y:10, z:10)
+        scene.rootNode.addChildNode(lightNode)
+        
+        let ambientLightNode = SCNNode()
+        ambientLightNode.light = SCNLight()
+        ambientLightNode.light?.type = .ambient
+        ambientLightNode.light?.color = UIColor.darkGray
+        scene.rootNode.addChildNode(ambientLightNode)
         
         let planeNode = SCNNode()
         planeNode.name = "plane"
