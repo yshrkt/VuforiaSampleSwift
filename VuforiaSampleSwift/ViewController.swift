@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let vuforiaLiceseKey = "Your License Key"
+    let vuforiaLicenseKey = "Your License Key"
     let vuforiaDataSetFile = "Target XML File"
     
     var vuforiaManager: VuforiaManager? = nil
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
 
 private extension ViewController {
     func prepare() {
-        vuforiaManager = VuforiaManager(licenseKey: vuforiaLiceseKey, dataSetFile: vuforiaDataSetFile)
+        vuforiaManager = VuforiaManager(licenseKey: vuforiaLicenseKey, dataSetFile: vuforiaDataSetFile)
         if let manager = vuforiaManager {
             manager.delegate = self
             manager.eaglView.sceneSource = self
