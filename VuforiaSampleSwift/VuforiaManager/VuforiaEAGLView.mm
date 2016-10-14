@@ -165,6 +165,7 @@ namespace VuforiaEAGLViewUtils
 }
 
 - (void)setupRenderer {
+    _startTime = CFAbsoluteTimeGetCurrent();
     _renderer = [SCNRenderer rendererWithContext:_context options:nil];
     //_renderer.autoenablesDefaultLighting = YES;
     _renderer.playing = YES;
@@ -292,7 +293,8 @@ namespace VuforiaEAGLViewUtils
         VuforiaEAGLViewUtils::scalePoseMatrix(_objectScale,  _objectScale,  _objectScale, &modelViewMatrix.data[0]);
         
         [self setCameraMatrix:modelViewMatrix]; // SCNCameraにセット
-        [_renderer renderAtTime:CFAbsoluteTimeGetCurrent() - _startTime]; // render using SCNRenderer
+        CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent() - _startTime;
+        [_renderer renderAtTime: currentTime]; // render using SCNRenderer
         
         VuforiaEAGLViewUtils::checkGlError("EAGLView renderFrameVuforia");
     }
