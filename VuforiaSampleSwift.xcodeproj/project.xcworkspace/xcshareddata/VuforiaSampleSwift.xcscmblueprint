@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5F237C6F1728CAE8A278A4ED3722F8B7D878C686",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "5F237C6F1728CAE8A278A4ED3722F8B7D878C686" : 9223372036854775807,
+    "DCD14167E88C2C97DDC6A059CB5F7975C93FA4DB" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "8FC9761C-DD85-4312-9597-50FAEC609F47",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "5F237C6F1728CAE8A278A4ED3722F8B7D878C686" : "Vuforia%20Sample\/",
+    "DCD14167E88C2C97DDC6A059CB5F7975C93FA4DB" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "VuforiaSampleSwift",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "VuforiaSampleSwift.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/byroncoetsee\/VuforiaSampleSwift.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5F237C6F1728CAE8A278A4ED3722F8B7D878C686"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/byroncoetsee\/Programming.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DCD14167E88C2C97DDC6A059CB5F7975C93FA4DB"
+    }
+  ]
+}

@@ -10,8 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let vuforiaLicenseKey = "Your License Key"
-    let vuforiaDataSetFile = "Target XML File"
+    let vuforiaLicenseKey = "Vuforia License Key"
+    let vuforiaDataSetFile = "StonesAndChips.xml"
     
     var vuforiaManager: VuforiaManager? = nil
     
