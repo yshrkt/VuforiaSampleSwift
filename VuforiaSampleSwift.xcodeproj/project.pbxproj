@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75973D5B1DB6187800716570 /* StonesAndChips.xml in Resources */ = {isa = PBXBuildFile; fileRef = 75973D591DB6130500716570 /* StonesAndChips.xml */; };
+		75973D5C1DB61C1800716570 /* StonesAndChips.dat in Resources */ = {isa = PBXBuildFile; fileRef = 75973D581DB612FE00716570 /* StonesAndChips.dat */; };
 		9239E4601D8A5A7200CD2406 /* libVuforia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9239E4591D8A5A7200CD2406 /* libVuforia.a */; };
 		926096D41D4163B600510C24 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926096D31D4163B600510C24 /* SpriteKit.framework */; };
 		927B76D71D27FDC600C4F5CC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927B76D41D27FDC600C4F5CC /* AVFoundation.framework */; };
@@ -17,10 +19,6 @@
 		927B76EA1D2806EF00C4F5CC /* VuforiaEAGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 927B76E51D2806EF00C4F5CC /* VuforiaEAGLView.mm */; };
 		927B76EB1D2806EF00C4F5CC /* VuforiaManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 927B76E71D2806EF00C4F5CC /* VuforiaManager.mm */; };
 		927B76EC1D2806EF00C4F5CC /* VuforiaObjects.mm in Sources */ = {isa = PBXBuildFile; fileRef = 927B76E91D2806EF00C4F5CC /* VuforiaObjects.mm */; };
-		927B76F71D28070D00C4F5CC /* StonesAndChips.dat in Resources */ = {isa = PBXBuildFile; fileRef = 927B76F11D28070D00C4F5CC /* StonesAndChips.dat */; };
-		927B76F81D28070D00C4F5CC /* StonesAndChips.xml in Resources */ = {isa = PBXBuildFile; fileRef = 927B76F21D28070D00C4F5CC /* StonesAndChips.xml */; };
-		927B76F91D28070D00C4F5CC /* Tarmac.dat in Resources */ = {isa = PBXBuildFile; fileRef = 927B76F31D28070D00C4F5CC /* Tarmac.dat */; };
-		927B76FA1D28070D00C4F5CC /* Tarmac.xml in Resources */ = {isa = PBXBuildFile; fileRef = 927B76F41D28070D00C4F5CC /* Tarmac.xml */; };
 		927B76FD1D2816DB00C4F5CC /* VuforiaShaderUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 927B76FC1D2816DB00C4F5CC /* VuforiaShaderUtils.m */; };
 		927B77081D2824AB00C4F5CC /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927B77071D2824AB00C4F5CC /* OpenGLES.framework */; };
 		927B77091D282DF100C4F5CC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 927B76D31D27FDC600C4F5CC /* AudioToolbox.framework */; };
@@ -34,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		75973D581DB612FE00716570 /* StonesAndChips.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = StonesAndChips.dat; path = Targets/StonesAndChips.dat; sourceTree = SOURCE_ROOT; };
+		75973D591DB6130500716570 /* StonesAndChips.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = StonesAndChips.xml; path = Targets/StonesAndChips.xml; sourceTree = SOURCE_ROOT; };
 		9239E3FF1D8A5A7200CD2406 /* Area.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Area.h; sourceTree = "<group>"; };
 		9239E4001D8A5A7200CD2406 /* Box3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box3D.h; sourceTree = "<group>"; };
 		9239E4011D8A5A7200CD2406 /* CameraCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraCalibration.h; sourceTree = "<group>"; };
@@ -136,10 +136,6 @@
 		927B76E71D2806EF00C4F5CC /* VuforiaManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VuforiaManager.mm; path = VuforiaManager/VuforiaManager.mm; sourceTree = "<group>"; };
 		927B76E81D2806EF00C4F5CC /* VuforiaObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VuforiaObjects.h; path = VuforiaManager/VuforiaObjects.h; sourceTree = "<group>"; };
 		927B76E91D2806EF00C4F5CC /* VuforiaObjects.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VuforiaObjects.mm; path = VuforiaManager/VuforiaObjects.mm; sourceTree = "<group>"; };
-		927B76F11D28070D00C4F5CC /* StonesAndChips.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = StonesAndChips.dat; sourceTree = "<group>"; };
-		927B76F21D28070D00C4F5CC /* StonesAndChips.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = StonesAndChips.xml; sourceTree = "<group>"; };
-		927B76F31D28070D00C4F5CC /* Tarmac.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tarmac.dat; sourceTree = "<group>"; };
-		927B76F41D28070D00C4F5CC /* Tarmac.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Tarmac.xml; sourceTree = "<group>"; };
 		927B76FB1D2816DB00C4F5CC /* VuforiaShaderUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VuforiaShaderUtils.h; path = VuforiaManager/VuforiaShaderUtils.h; sourceTree = "<group>"; };
 		927B76FC1D2816DB00C4F5CC /* VuforiaShaderUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VuforiaShaderUtils.m; path = VuforiaManager/VuforiaShaderUtils.m; sourceTree = "<group>"; };
 		927B77071D2824AB00C4F5CC /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -176,12 +172,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9239E3F91D8A5A7200CD2406 /* vuforia-sdk-ios-6-0-112 */ = {
+		9239E3F91D8A5A7200CD2406 /* vuforia-sdk-ios */ = {
 			isa = PBXGroup;
 			children = (
 				9239E3FC1D8A5A7200CD2406 /* build */,
 			);
-			path = "vuforia-sdk-ios-6-0-112";
+			name = "vuforia-sdk-ios";
+			path = "../vuforia-sdk";
 			sourceTree = "<group>";
 		};
 		9239E3FC1D8A5A7200CD2406 /* build */ = {
@@ -355,10 +352,8 @@
 		927B76EE1D28070D00C4F5CC /* ImageTargets */ = {
 			isa = PBXGroup;
 			children = (
-				927B76F11D28070D00C4F5CC /* StonesAndChips.dat */,
-				927B76F21D28070D00C4F5CC /* StonesAndChips.xml */,
-				927B76F31D28070D00C4F5CC /* Tarmac.dat */,
-				927B76F41D28070D00C4F5CC /* Tarmac.xml */,
+				75973D581DB612FE00716570 /* StonesAndChips.dat */,
+				75973D591DB6130500716570 /* StonesAndChips.xml */,
 			);
 			path = ImageTargets;
 			sourceTree = "<group>";
@@ -382,9 +377,10 @@
 		92AA11071D27A5EB00E56CBE /* VuforiaSampleSwift */ = {
 			isa = PBXGroup;
 			children = (
-				92AA11801D27A6CD00E56CBE /* VuforiaSampleSwift-Bridging-Header.h */,
-				927B76E31D27FF2300C4F5CC /* VuforiaManager */,
+				9239E3F91D8A5A7200CD2406 /* vuforia-sdk-ios */,
 				927B76ED1D28070D00C4F5CC /* VuforiaAssets */,
+				927B76E31D27FF2300C4F5CC /* VuforiaManager */,
+				92AA11801D27A6CD00E56CBE /* VuforiaSampleSwift-Bridging-Header.h */,
 				92AA11081D27A5EB00E56CBE /* AppDelegate.swift */,
 				92AA110A1D27A5EB00E56CBE /* ViewController.swift */,
 				92AA110C1D27A5EB00E56CBE /* Main.storyboard */,
@@ -392,7 +388,6 @@
 				92AA11111D27A5EB00E56CBE /* LaunchScreen.storyboard */,
 				92AA11141D27A5EB00E56CBE /* Info.plist */,
 				92AA11841D27B96300E56CBE /* Localizable.strings */,
-				9239E3F91D8A5A7200CD2406 /* vuforia-sdk-ios-6-0-112 */,
 				927B76DF1D27FE5900C4F5CC /* Frameworks */,
 			);
 			path = VuforiaSampleSwift;
@@ -430,6 +425,7 @@
 				TargetAttributes = {
 					92AA11041D27A5EB00E56CBE = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 7A6ZJ37YMY;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -459,12 +455,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				92AA11131D27A5EB00E56CBE /* LaunchScreen.storyboard in Resources */,
-				927B76FA1D28070D00C4F5CC /* Tarmac.xml in Resources */,
 				92AA11101D27A5EB00E56CBE /* Assets.xcassets in Resources */,
-				927B76F91D28070D00C4F5CC /* Tarmac.dat in Resources */,
-				927B76F81D28070D00C4F5CC /* StonesAndChips.xml in Resources */,
+				75973D5C1DB61C1800716570 /* StonesAndChips.dat in Resources */,
+				75973D5B1DB6187800716570 /* StonesAndChips.xml in Resources */,
 				92AA11851D27B96300E56CBE /* Localizable.strings in Resources */,
-				927B76F71D28070D00C4F5CC /* StonesAndChips.dat in Resources */,
 				92AA110E1D27A5EB00E56CBE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -603,14 +597,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7A6ZJ37YMY;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/VuforiaSampleSwift/vuforia-sdk-ios-6-0-112/build/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/vuforia-sdk/build/include\"";
 				INFOPLIST_FILE = VuforiaSampleSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/VuforiaSampleSwift/vuforia-sdk-ios-6-0-112/build/lib/arm",
+					"\"$(SRCROOT)/vuforia-sdk/build/lib/arm\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sputnik-apps.VuforiaSampleSwift";
 				PRODUCT_NAME = VuforiaSampleSwift;
@@ -627,14 +621,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7A6ZJ37YMY;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/VuforiaSampleSwift/vuforia-sdk-ios-6-0-112/build/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/vuforia-sdk/build/include\"";
 				INFOPLIST_FILE = VuforiaSampleSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/VuforiaSampleSwift/vuforia-sdk-ios-6-0-112/build/lib/arm",
+					"\"$(SRCROOT)/vuforia-sdk/build/lib/arm\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sputnik-apps.VuforiaSampleSwift";
 				PRODUCT_NAME = VuforiaSampleSwift;

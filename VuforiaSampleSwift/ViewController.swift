@@ -10,9 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let vuforiaLicenseKey = "Your License Key"
-    let vuforiaDataSetFile = "Target XML File"
-    
+    let vuforiaLicenseKey = "Vuforia License Key"
+    let vuforiaDataSetFile = "StonesAndChips.xml"
+	
     var vuforiaManager: VuforiaManager? = nil
     
     let boxMaterial = SCNMaterial()
@@ -111,7 +111,16 @@ extension ViewController: VuforiaManagerDelegate {
     func vuforiaManager(_ manager: VuforiaManager!, didFailToPreparingWithError error: Error!) {
         print("did faid to preparing \(error)\n")
     }
-    
+	
+	
+	// CLOUD RECOGNITION NOTE
+	//
+	// The trackable name will be the same name as what you entered in the Vuforia Dashboard for that target.
+	// Everything will be done the exact same as Device Recognition.
+	// Note: Device Regnotion has been removed when cloud is active (Different code in VuforiaManager)
+	//
+	
+	
     func vuforiaManager(_ manager: VuforiaManager!, didUpdateWith state: VuforiaState!) {
         for index in 0 ..< state.numberOfTrackableResults {
             let result = state.trackableResult(at: index)
