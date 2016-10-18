@@ -448,26 +448,10 @@ namespace {
 			return;
 		}
 		objectTracker->start();
-		
-		// Start cloud based recognition if we are in scanning mode:
-		//		if (scanningMode)
-		//		{
 		Vuforia::TargetFinder* targetFinder = objectTracker->getTargetFinder();
 		if (targetFinder != 0) {
 			isVisualSearchOn = targetFinder->startRecognition();
 		}
-		//		}
-		
-		//        Vuforia::DataSet* dataSet = [self loadObjectTrackerDataSet:_dataSetFile];
-		//        if(dataSet == NULL) {
-		//            [self.delegate vuforiaManager:self didFailToPreparingWithError:[self buildErrorWithCode:VuforiaError_LoadingTrackersData]];
-		//            return;
-		//        }
-		//
-		//        if(![self activateDataSet:dataSet]) {
-		//            [self.delegate vuforiaManager:self didFailToPreparingWithError:[self buildErrorWithCode:VuforiaError_LoadingTrackersData]];
-		//            return;
-		//        }
 	}
 	
 	[self.delegate vuforiaManagerDidFinishPreparing:self];
