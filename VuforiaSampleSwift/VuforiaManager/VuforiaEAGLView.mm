@@ -147,7 +147,7 @@ namespace VuforiaEAGLViewUtils
         }
         
         _offTargetTrackingEnabled = NO;
-        _objectScale = 50.0f;
+        _objectScale = 0.03175f;
     }
     
     return self;

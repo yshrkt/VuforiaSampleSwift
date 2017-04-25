@@ -175,7 +175,7 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         
         let planeNode = SCNNode()
         planeNode.name = "plane"
-        planeNode.geometry = SCNPlane(width: 247.0/view.objectScale, height: 173.0/view.objectScale)
+        planeNode.geometry = SCNPlane(width: 247.0*view.objectScale, height: 173.0*view.objectScale)
         planeNode.position = SCNVector3Make(0, 0, -1)
         let planeMaterial = SCNMaterial()
         planeMaterial.diffuse.contents = UIColor.green
@@ -212,7 +212,7 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
         
         let planeNode = SCNNode()
         planeNode.name = "plane"
-        planeNode.geometry = SCNPlane(width: 247.0/view.objectScale, height: 173.0/view.objectScale)
+        planeNode.geometry = SCNPlane(width: 247.0*view.objectScale, height: 173.0*view.objectScale)
         planeNode.position = SCNVector3Make(0, 0, -1)
         let planeMaterial = SCNMaterial()
         planeMaterial.diffuse.contents = UIColor.red
@@ -230,17 +230,17 @@ extension ViewController: VuforiaEAGLViewSceneSource, VuforiaEAGLViewDelegate {
     }
     
     func vuforiaEAGLView(_ view: VuforiaEAGLView!, didTouchDownNode node: SCNNode!) {
-        print("touch down \(node.name)\n")
+        print("touch down \(node.name ?? "")\n")
         boxMaterial.transparency = 0.6
     }
     
     func vuforiaEAGLView(_ view: VuforiaEAGLView!, didTouchUp node: SCNNode!) {
-        print("touch up \(node.name)\n")
+        print("touch up \(node.name ?? "")\n")
         boxMaterial.transparency = 1.0
     }
     
     func vuforiaEAGLView(_ view: VuforiaEAGLView!, didTouchCancel node: SCNNode!) {
-        print("touch cancel \(node.name)\n")
+        print("touch cancel \(node.name ?? "")\n")
         boxMaterial.transparency = 1.0
     }
 }

@@ -719,7 +719,7 @@ namespace {
     
     // Cache the projection matrix
     const Vuforia::CameraCalibration& cameraCalibration = Vuforia::CameraDevice::getInstance().getCameraCalibration();
-    _projectionMatrix = Vuforia::Tool::getProjectionGL(cameraCalibration, 2.0f, 5000.0f);
+    _projectionMatrix = Vuforia::Tool::getProjectionGL(cameraCalibration, 0.05f, 5000.0f);
     
     [_eaglView setProjectionMatrix:_projectionMatrix];
     
