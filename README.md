@@ -54,6 +54,10 @@ do {
 
 ![screenshot](https://github.com/yshrkt/VuforiaSampleSwift/blob/master/screenshot.jpg)
 
+## License
+
+MIT license. [See LICENSE](https://github.com/yshrkt/VuforiaSampleSwift/blob/master/LICENSE) for details.
+
 ## Thanks
 
 I am referring to the following page.
