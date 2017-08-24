@@ -491,8 +491,6 @@ namespace {
         }
     }
     
-    _dataSet = nil;
-    
     return success;
 }
 
