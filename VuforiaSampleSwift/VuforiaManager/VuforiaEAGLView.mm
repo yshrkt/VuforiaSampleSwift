@@ -311,6 +311,7 @@ namespace VuforiaEAGLViewUtils
     CGPoint pos = location;
     pos.x *= [[UIScreen mainScreen] nativeScale];
     pos.y *= [[UIScreen mainScreen] nativeScale];
+    pos.x = pos.x - _manager.viewport.origin.x;
     pos.y = _manager.viewport.size.height + _manager.viewport.origin.y - pos.y;
     NSArray* results = [_renderer hitTest:pos options:nil];
     return [[results firstObject] node];
