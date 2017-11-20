@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, VuforiaError) {
 @property (nonatomic, readonly)BOOL frontCameraEnabled;
 @property (nonatomic, readonly)CGRect viewport;
 @property (nonatomic, readonly)VuforiaEAGLView* eaglView;
+@property (nonatomic, readonly)BOOL isCameraStarted;
 
 - (instancetype)init __attribute__((unavailable("init is not available")));
 - (instancetype)initWithLicenseKey:(NSString*)licenseKey dataSetFile:(NSString*)path;

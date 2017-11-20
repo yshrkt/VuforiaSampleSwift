@@ -4,9 +4,9 @@ Vuforia sample code with SceneKit using Swift.
 
 ## Requirement
 
-* Xcode 8.3
-* iOS 10.3
-* Vuforia SDK for iOS v6.2.9
+* Xcode 9.1
+* iOS 11.1
+* Vuforia SDK for iOS v6.5.25
 
 ## Setup
 
