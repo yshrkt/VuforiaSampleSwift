@@ -15,12 +15,24 @@
 #import <OpenGLES/ES2/glext.h>
 #import <sys/time.h>
 
+#import <Vuforia/UIGLViewProtocol.h>
+#import <Vuforia/Renderer.h>
+#import <Vuforia/CameraDevice.h>
 #import <Vuforia/Vuforia.h>
+#import <Vuforia/TrackerManager.h>
+#import <Vuforia/Tool.h>
+#import <Vuforia/ObjectTracker.h>
 #import <Vuforia/State.h>
 #import <Vuforia/Tool.h>
-#import <Vuforia/Renderer.h>
-#import <Vuforia/TrackableResult.h>
+#import <Vuforia/ObjectTracker.h>
+#import <Vuforia/RotationalDeviceTracker.h>
+#import <Vuforia/StateUpdater.h>
+#import <Vuforia/GLRenderer.h>
 #import <Vuforia/VideoBackgroundConfig.h>
+#import <Vuforia/View.h>
+#import <Vuforia/RenderingPrimitives.h>
+#import <Vuforia/Device.h>
+#import <Vuforia/TrackableResult.h>
 
 #import "VuforiaShaderUtils.h"
 
@@ -113,6 +125,17 @@ namespace VuforiaEAGLViewUtils
     SCNNode* _currentTouchNode;
     
     SCNMatrix4 _projectionTransform;
+    
+    CGFloat _nearPlane;
+    CGFloat _farPlane;
+    
+    GLuint _vbShaderProgramID;
+    GLint _vbVertexHandle;
+    GLint _vbTexCoordHandle;
+    GLint _vbTexSampler2DHandle;
+    GLint _vbProjectionMatrixHandle;
+    Vuforia::VIEW _currentView;
+    Vuforia::RenderingPrimitives* _currentRenderingPrimitives;
 }
 
 // You must implement this method, which ensures the view's underlying layer is
@@ -148,9 +171,31 @@ namespace VuforiaEAGLViewUtils
         
         _offTargetTrackingEnabled = NO;
         _objectScale = 0.03175f;
+        
+        _nearPlane = 0.01;
+        _farPlane = 5;
+        
+        [self initRendering];
     }
     
     return self;
+}
+
+- (void) initRendering {
+    // Video background rendering
+    _vbShaderProgramID = [VuforiaShaderUtils createProgramWithVertexShaderFileName:@"Background.vertsh"
+                                                                fragmentShaderFileName:@"Background.fragsh"];
+    
+    if (0 < _vbShaderProgramID) {
+        _vbVertexHandle = glGetAttribLocation(_vbShaderProgramID, "vertexPosition");
+        _vbTexCoordHandle = glGetAttribLocation(_vbShaderProgramID, "vertexTexCoord");
+        _vbProjectionMatrixHandle = glGetUniformLocation(_vbShaderProgramID, "projectionMatrix");
+        _vbTexSampler2DHandle = glGetUniformLocation(_vbShaderProgramID, "texSampler2D");
+    }
+    else {
+        NSLog(@"Could not initialise video background shader");
+    }
+    
 }
 
 
@@ -162,6 +207,11 @@ namespace VuforiaEAGLViewUtils
     if ([EAGLContext currentContext] == _context) {
         [EAGLContext setCurrentContext:nil];
     }
+}
+
+- (void) setNearPlane:(CGFloat) near farPlane:(CGFloat) far {
+    _nearPlane = near;
+    _farPlane = far;
 }
 
 - (void)setupRenderer {
@@ -254,14 +304,87 @@ namespace VuforiaEAGLViewUtils
 // *** Vuforia will call this method periodically on a background thread ***
 - (void)renderFrameVuforia
 {
+    if(!_manager.isCameraStarted) {
+        return;
+    }
+    
+    // Render video background and retrieve tracking state
+    const Vuforia::State state = Vuforia::TrackerManager::getInstance().getStateUpdater().updateState();
+    Vuforia::Renderer::getInstance().begin(state);
+    
+    
+    if(Vuforia::Renderer::getInstance().getVideoBackgroundConfig().mReflection == Vuforia::VIDEO_BACKGROUND_REFLECTION_ON)
+        glFrontFace(GL_CW);  //Front camera
+    else
+        glFrontFace(GL_CCW);   //Back camera
+    
+    if(_currentRenderingPrimitives == nullptr)
+        [self updateRenderingPrimitives];
+    
+    Vuforia::ViewList& viewList = _currentRenderingPrimitives->getRenderingViews();
+    
+    // Clear colour and depth buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    
+    // Iterate over the ViewList
+    for (int viewIdx = 0; viewIdx < viewList.getNumViews(); viewIdx++) {
+        Vuforia::VIEW vw = viewList.getView(viewIdx);
+        _currentView = vw;
+        
+        // Set up the viewport
+        Vuforia::Vec4I viewport;
+        // We're writing directly to the screen, so the viewport is relative to the screen
+        viewport = _currentRenderingPrimitives->getViewport(vw);
+        
+        // Set viewport for current view
+        glViewport(viewport.data[0], viewport.data[1], viewport.data[2], viewport.data[3]);
+        
+        //set scissor
+        glScissor(viewport.data[0], viewport.data[1], viewport.data[2], viewport.data[3]);
+        
+        Vuforia::Matrix34F projMatrix = _currentRenderingPrimitives->getProjectionMatrix(vw,
+                                                                                         Vuforia::COORDINATE_SYSTEM_CAMERA);
+        
+        Vuforia::Matrix44F rawProjectionMatrixGL = Vuforia::Tool::convertPerspectiveProjection2GLMatrix(
+                                                                                                        projMatrix,
+                                                                                                        _nearPlane,
+                                                                                                        _farPlane);
+        
+        // Apply the appropriate eye adjustment to the raw projection matrix, and assign to the global variable
+        Vuforia::Matrix44F eyeAdjustmentGL = Vuforia::Tool::convert2GLMatrix(_currentRenderingPrimitives->getEyeDisplayAdjustmentMatrix(vw));
+        
+        Vuforia::Matrix44F projectionMatrix;
+        VuforiaEAGLViewUtils::multiplyMatrix(&rawProjectionMatrixGL.data[0], &eyeAdjustmentGL.data[0], &projectionMatrix.data[0]);
+        
+        if (_currentView != Vuforia::VIEW_POSTPROCESS) {
+            [self renderFrameWithState:state projectMatrix:projectionMatrix];
+        }
+        
+        glDisable(GL_SCISSOR_TEST);
+        
+    }
+    
+    Vuforia::Renderer::getInstance().end();
+}
+
+- (void)updateRenderingPrimitives
+{
+    delete _currentRenderingPrimitives;
+    _currentRenderingPrimitives = new Vuforia::RenderingPrimitives(Vuforia::Device::getInstance().getRenderingPrimitives());
+}
+
+- (void) renderFrameWithState:(const Vuforia::State&) state projectMatrix:(Vuforia::Matrix44F&) projectionMatrix {
     [self setFramebuffer];
     
     // Clear colour and depth buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Render video background and retrieve tracking state
-    Vuforia::State state = Vuforia::Renderer::getInstance().begin();
-    Vuforia::Renderer::getInstance().drawVideoBackground();
+    [self renderVideoBackground];
     
     glEnable(GL_DEPTH_TEST);
     // We must detect if background reflection is active and adjust the culling direction.
@@ -272,7 +395,7 @@ namespace VuforiaEAGLViewUtils
     } else {
         glEnable(GL_CULL_FACE);
     }
-
+    
     glCullFace(GL_BACK);
     if(Vuforia::Renderer::getInstance().getVideoBackgroundConfig().mReflection == Vuforia::VIDEO_BACKGROUND_REFLECTION_ON)
         glFrontFace(GL_CW);  //Front camera
@@ -302,8 +425,94 @@ namespace VuforiaEAGLViewUtils
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     
-    Vuforia::Renderer::getInstance().end();
     [self presentFramebuffer];
+}
+
+- (void) renderVideoBackground {
+    if (_currentView == Vuforia::VIEW_POSTPROCESS) {
+        return;
+    }
+    
+    // Use texture unit 0 for the video background - this will hold the camera frame and we want to reuse for all views
+    // So need to use a different texture unit for the augmentation
+    int vbVideoTextureUnit = 0;
+    
+    // Bind the video bg texture and get the Texture ID from Vuforia
+    Vuforia::GLTextureUnit tex;
+    tex.mTextureUnit = vbVideoTextureUnit;
+    
+    if (! Vuforia::Renderer::getInstance().updateVideoBackgroundTexture(&tex))
+    {
+        NSLog(@"Unable to bind video background texture!!");
+        return;
+    }
+    
+    Vuforia::Matrix44F vbProjectionMatrix = Vuforia::Tool::convert2GLMatrix(_currentRenderingPrimitives->getVideoBackgroundProjectionMatrix(_currentView, Vuforia::COORDINATE_SYSTEM_CAMERA));
+    
+    // Apply the scene scale on video see-through eyewear, to scale the video background and augmentation
+    // so that the display lines up with the real world
+    // This should not be applied on optical see-through devices, as there is no video background,
+    // and the calibration ensures that the augmentation matches the real world
+    if (Vuforia::Device::getInstance().isViewerActive())
+    {
+        float sceneScaleFactor = [self getSceneScaleFactorWithViewId:_currentView];
+        VuforiaEAGLViewUtils::scalePoseMatrix(sceneScaleFactor, sceneScaleFactor, 1.0f, vbProjectionMatrix.data);
+    }
+    
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_SCISSOR_TEST);
+    
+    const Vuforia::Mesh& vbMesh = _currentRenderingPrimitives->getVideoBackgroundMesh(_currentView);
+    // Load the shader and upload the vertex/texcoord/index data
+    glUseProgram(_vbShaderProgramID);
+    glVertexAttribPointer(_vbVertexHandle, 3, GL_FLOAT, false, 0, vbMesh.getPositionCoordinates());
+    glVertexAttribPointer(_vbTexCoordHandle, 2, GL_FLOAT, false, 0, vbMesh.getUVCoordinates());
+    
+    glUniform1i(_vbTexSampler2DHandle, vbVideoTextureUnit);
+    
+    // Render the video background with the custom shader
+    // First, we enable the vertex arrays
+    glEnableVertexAttribArray(_vbVertexHandle);
+    glEnableVertexAttribArray(_vbTexCoordHandle);
+    
+    // Pass the projection matrix to OpenGL
+    glUniformMatrix4fv(_vbProjectionMatrixHandle, 1, GL_FALSE, vbProjectionMatrix.data);
+    
+    // Then, we issue the render call
+    glDrawElements(GL_TRIANGLES, vbMesh.getNumTriangles() * 3, GL_UNSIGNED_SHORT,
+                   vbMesh.getTriangles());
+    
+    // Finally, we disable the vertex arrays
+    glDisableVertexAttribArray(_vbVertexHandle);
+    glDisableVertexAttribArray(_vbTexCoordHandle);
+    
+    VuforiaEAGLViewUtils::checkGlError("Rendering of the video background failed");
+}
+
+-(float) getSceneScaleFactorWithViewId:(Vuforia::VIEW)viewId
+{
+    // Get the y-dimension of the physical camera field of view
+    Vuforia::Vec2F fovVector = Vuforia::CameraDevice::getInstance().getCameraCalibration().getFieldOfViewRads();
+    float cameraFovYRads = fovVector.data[1];
+    
+    // Get the y-dimension of the virtual camera field of view
+    Vuforia::Vec4F virtualFovVector = _currentRenderingPrimitives->getEffectiveFov(viewId); // {left, right, bottom, top}
+    float virtualFovYRads = virtualFovVector.data[2] + virtualFovVector.data[3];
+    
+    // The scene-scale factor represents the proportion of the viewport that is filled by
+    // the video background when projected onto the same plane.
+    // In order to calculate this, let 'd' be the distance between the cameras and the plane.
+    // The height of the projected image 'h' on this plane can then be calculated:
+    //   tan(fov/2) = h/2d
+    // which rearranges to:
+    //   2d = h/tan(fov/2)
+    // Since 'd' is the same for both cameras, we can combine the equations for the two cameras:
+    //   hPhysical/tan(fovPhysical/2) = hVirtual/tan(fovVirtual/2)
+    // Which rearranges to:
+    //   hPhysical/hVirtual = tan(fovPhysical/2)/tan(fovVirtual/2)
+    // ... which is the scene-scale factor
+    return tan(cameraFovYRads / 2) / tan(virtualFovYRads / 2);
 }
 
 #pragma mark Touch Evnets

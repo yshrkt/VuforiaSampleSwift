@@ -195,6 +195,10 @@ namespace {
     }
 }
 
+- (BOOL)isCameraStarted {
+    return _isCameraStarted;
+}
+
 
 #pragma mark - build a NSError
 - (NSError*) buildErrorWithCode:(int) code {

@@ -1,0 +1,19 @@
+/*===============================================================================
+Copyright (c) 2016 PTC Inc. All Rights Reserved.
+
+Copyright (c) 2012-2015 Qualcomm Connected Experiences, Inc. All Rights Reserved.
+
+Vuforia is a trademark of PTC Inc., registered in the United States and other
+countries.
+===============================================================================*/
+
+attribute vec4 vertexPosition;
+attribute vec2 vertexTexCoord;
+uniform mat4 projectionMatrix;
+varying vec2 texCoord;
+
+void main()
+{
+  gl_Position = projectionMatrix * vertexPosition;
+  texCoord = vertexTexCoord;
+}

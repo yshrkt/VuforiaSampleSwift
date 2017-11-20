@@ -40,6 +40,8 @@
 
 - (id)initWithFrame:(CGRect)frame manager:(VuforiaManager *) manager;
 
+- (void)setNearPlane:(CGFloat) near farPlane:(CGFloat) far;
+
 - (void)setupRenderer;
 - (void)setNeedsChangeSceneWithUserInfo: (NSDictionary*)userInfo;
 
