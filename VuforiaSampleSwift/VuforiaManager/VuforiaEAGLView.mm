@@ -347,7 +347,8 @@ namespace VuforiaEAGLViewUtils
         glScissor(viewport.data[0], viewport.data[1], viewport.data[2], viewport.data[3]);
         
         Vuforia::Matrix34F projMatrix = _currentRenderingPrimitives->getProjectionMatrix(vw,
-                                                                                         Vuforia::COORDINATE_SYSTEM_CAMERA);
+                                                                                         Vuforia::COORDINATE_SYSTEM_CAMERA,
+                                                                                         state.getCameraCalibration());
         
         Vuforia::Matrix44F rawProjectionMatrixGL = Vuforia::Tool::convertPerspectiveProjection2GLMatrix(
                                                                                                         projMatrix,
