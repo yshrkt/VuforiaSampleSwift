@@ -417,6 +417,9 @@ namespace VuforiaEAGLViewUtils
         VuforiaEAGLViewUtils::scalePoseMatrix(_objectScale,  _objectScale,  _objectScale, &modelViewMatrix.data[0]);
         
         [self setCameraMatrix:modelViewMatrix]; // SCNCameraにセット
+		
+        [SCNTransaction flush];
+		
         CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent() - _startTime;
         [_renderer renderAtTime: currentTime]; // render using SCNRenderer
         
