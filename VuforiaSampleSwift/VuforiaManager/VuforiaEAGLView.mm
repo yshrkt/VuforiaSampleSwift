@@ -285,7 +285,7 @@ namespace VuforiaEAGLViewUtils
     SCNMatrix4 inverted = SCNMatrix4Invert(extrinsic);
     _cameraNode.transform = inverted;
     
-    //NSLog(@"position = %lf, %lf, %lf", _cameraNode.position.x, _cameraNode.position.y, _cameraNode.position.z); // デバッグ用
+    //NSLog(@"position = %lf, %lf, %lf", _cameraNode.position.x, _cameraNode.position.y, _cameraNode.position.z); // for Debug
 }
 
 - (void)setProjectionMatrix:(Vuforia::Matrix44F)matrix {
@@ -410,13 +410,13 @@ namespace VuforiaEAGLViewUtils
     for (int i = 0; i < state.getNumTrackableResults(); ++i) {
         // Get the trackable
         const Vuforia::TrackableResult* result = state.getTrackableResult(i);
-        //const Vuforia::Trackable& trackable = result->getTrackable();
+        
         Vuforia::Matrix44F modelViewMatrix = Vuforia::Tool::convertPose2GLMatrix(result->getPose()); // get model view matrix
         
         VuforiaEAGLViewUtils::translatePoseMatrix(0.0f, 0.0f, _objectScale, &modelViewMatrix.data[0]);
         VuforiaEAGLViewUtils::scalePoseMatrix(_objectScale,  _objectScale,  _objectScale, &modelViewMatrix.data[0]);
         
-        [self setCameraMatrix:modelViewMatrix]; // SCNCameraにセット
+        [self setCameraMatrix:modelViewMatrix]; // set camera matrix to SCNCamera
 		
         [SCNTransaction flush];
 		
