@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9247FF1C2060FA7800F25884 /* license_3rdpartynotice.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9247FEBD2060FA7800F25884 /* license_3rdpartynotice.txt */; };
-		9247FF1D2060FA7800F25884 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9247FEBF2060FA7800F25884 /* readme.txt */; };
-		9247FF1E2060FA7800F25884 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9247FEC02060FA7800F25884 /* readme.txt */; };
-		9247FF1F2060FA7800F25884 /* libVuforia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9247FF1B2060FA7800F25884 /* libVuforia.a */; };
+		3703D8F821B6F88900C13C84 /* Vuforia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3703D8F721B6F88900C13C84 /* Vuforia.framework */; };
+		3703D8F921B6F89100C13C84 /* Vuforia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3703D8F721B6F88900C13C84 /* Vuforia.framework */; };
+		3703D8FA21B6F89100C13C84 /* Vuforia.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3703D8F721B6F88900C13C84 /* Vuforia.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		926096D41D4163B600510C24 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926096D31D4163B600510C24 /* SpriteKit.framework */; };
 		9275279C1FC2CE5200CE7DCE /* Background.fragsh in Resources */ = {isa = PBXBuildFile; fileRef = 9275279A1FC2CE5200CE7DCE /* Background.fragsh */; };
 		9275279D1FC2CE5200CE7DCE /* Background.vertsh in Resources */ = {isa = PBXBuildFile; fileRef = 9275279B1FC2CE5200CE7DCE /* Background.vertsh */; };
@@ -49,96 +48,22 @@
 		92DCE9C01E37CEA400E0DE1C /* Tarmac.xml in Resources */ = {isa = PBXBuildFile; fileRef = 92DCE9BA1E37CEA400E0DE1C /* Tarmac.xml */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3703D8FB21B6F89200C13C84 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3703D8FA21B6F89100C13C84 /* Vuforia.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		9247FEBD2060FA7800F25884 /* license_3rdpartynotice.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license_3rdpartynotice.txt; sourceTree = "<group>"; };
-		9247FEBF2060FA7800F25884 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
-		9247FEC02060FA7800F25884 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
-		9247FEC42060FA7800F25884 /* Type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Type.h; sourceTree = "<group>"; };
-		9247FEC52060FA7800F25884 /* MetalRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalRenderer.h; sourceTree = "<group>"; };
-		9247FEC62060FA7800F25884 /* VuMarkTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VuMarkTarget.h; sourceTree = "<group>"; };
-		9247FEC72060FA7800F25884 /* GLRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderer.h; sourceTree = "<group>"; };
-		9247FEC82060FA7800F25884 /* TrackableSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackableSource.h; sourceTree = "<group>"; };
-		9247FEC92060FA7800F25884 /* Obb3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obb3D.h; sourceTree = "<group>"; };
-		9247FECA2060FA7800F25884 /* Vuforia_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vuforia_iOS.h; sourceTree = "<group>"; };
-		9247FECB2060FA7800F25884 /* VideoBackgroundTextureInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoBackgroundTextureInfo.h; sourceTree = "<group>"; };
-		9247FECC2060FA7800F25884 /* WordList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordList.h; sourceTree = "<group>"; };
-		9247FECD2060FA7800F25884 /* CylinderTargetResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CylinderTargetResult.h; sourceTree = "<group>"; };
-		9247FECE2060FA7800F25884 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
-		9247FECF2060FA7800F25884 /* CustomViewerParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomViewerParameters.h; sourceTree = "<group>"; };
-		9247FED02060FA7800F25884 /* Obb2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obb2D.h; sourceTree = "<group>"; };
-		9247FED12060FA7800F25884 /* ModelTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelTarget.h; sourceTree = "<group>"; };
-		9247FED22060FA7800F25884 /* Anchor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Anchor.h; sourceTree = "<group>"; };
-		9247FED32060FA7800F25884 /* InstanceId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstanceId.h; sourceTree = "<group>"; };
-		9247FED42060FA7800F25884 /* VideoMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMode.h; sourceTree = "<group>"; };
-		9247FED52060FA7800F25884 /* TrackableResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackableResult.h; sourceTree = "<group>"; };
-		9247FED62060FA7800F25884 /* RotationalDeviceTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationalDeviceTracker.h; sourceTree = "<group>"; };
-		9247FED72060FA7800F25884 /* ObjectTargetResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectTargetResult.h; sourceTree = "<group>"; };
-		9247FED82060FA7800F25884 /* TextTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTracker.h; sourceTree = "<group>"; };
-		9247FED92060FA7800F25884 /* TargetSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetSearchResult.h; sourceTree = "<group>"; };
-		9247FEDA2060FA7800F25884 /* MultiTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiTarget.h; sourceTree = "<group>"; };
-		9247FEDB2060FA7800F25884 /* Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
-		9247FEDC2060FA7800F25884 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
-		9247FEDD2060FA7800F25884 /* Box3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box3D.h; sourceTree = "<group>"; };
-		9247FEDE2060FA7800F25884 /* Vectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vectors.h; sourceTree = "<group>"; };
-		9247FEDF2060FA7800F25884 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
-		9247FEE02060FA7800F25884 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
-		9247FEE12060FA7800F25884 /* VuMarkTargetResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VuMarkTargetResult.h; sourceTree = "<group>"; };
-		9247FEE22060FA7800F25884 /* Area.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Area.h; sourceTree = "<group>"; };
-		9247FEE32060FA7800F25884 /* GuideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideView.h; sourceTree = "<group>"; };
-		9247FEE42060FA7800F25884 /* ObjectTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectTracker.h; sourceTree = "<group>"; };
-		9247FEE52060FA7800F25884 /* EyewearCalibrationProfileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EyewearCalibrationProfileManager.h; sourceTree = "<group>"; };
-		9247FEE62060FA7800F25884 /* DeviceTrackableResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceTrackableResult.h; sourceTree = "<group>"; };
-		9247FEE72060FA7800F25884 /* VirtualButtonResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualButtonResult.h; sourceTree = "<group>"; };
-		9247FEE82060FA7800F25884 /* Illumination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Illumination.h; sourceTree = "<group>"; };
-		9247FEE92060FA7800F25884 /* DataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSet.h; sourceTree = "<group>"; };
-		9247FEEA2060FA7800F25884 /* EyewearCalibrationReading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EyewearCalibrationReading.h; sourceTree = "<group>"; };
-		9247FEEB2060FA7800F25884 /* ModelTargetResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelTargetResult.h; sourceTree = "<group>"; };
-		9247FEEC2060FA7800F25884 /* EyeID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EyeID.h; sourceTree = "<group>"; };
-		9247FEED2060FA7800F25884 /* SmartTerrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartTerrain.h; sourceTree = "<group>"; };
-		9247FEEE2060FA7800F25884 /* EyewearUserCalibrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EyewearUserCalibrator.h; sourceTree = "<group>"; };
-		9247FEEF2060FA7800F25884 /* NonCopyable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonCopyable.h; sourceTree = "<group>"; };
-		9247FEF02060FA7800F25884 /* HeadTransformModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadTransformModel.h; sourceTree = "<group>"; };
-		9247FEF12060FA7800F25884 /* ImageTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTarget.h; sourceTree = "<group>"; };
-		9247FEF22060FA7800F25884 /* PositionalDeviceTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionalDeviceTracker.h; sourceTree = "<group>"; };
-		9247FEF32060FA7800F25884 /* Vuforia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vuforia.h; sourceTree = "<group>"; };
-		9247FEF42060FA7800F25884 /* VuMarkTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VuMarkTemplate.h; sourceTree = "<group>"; };
-		9247FEF52060FA7800F25884 /* TrackerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackerManager.h; sourceTree = "<group>"; };
-		9247FEF62060FA7800F25884 /* VirtualButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualButton.h; sourceTree = "<group>"; };
-		9247FEF72060FA7800F25884 /* Trackable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trackable.h; sourceTree = "<group>"; };
-		9247FEF82060FA7800F25884 /* UpdateCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateCallback.h; sourceTree = "<group>"; };
-		9247FEF92060FA7800F25884 /* EyewearDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EyewearDevice.h; sourceTree = "<group>"; };
-		9247FEFA2060FA7800F25884 /* UIGLViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIGLViewProtocol.h; sourceTree = "<group>"; };
-		9247FEFB2060FA7800F25884 /* ViewerParametersList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewerParametersList.h; sourceTree = "<group>"; };
-		9247FEFC2060FA7800F25884 /* MultiTargetResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiTargetResult.h; sourceTree = "<group>"; };
-		9247FEFD2060FA7800F25884 /* Tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tool.h; sourceTree = "<group>"; };
-		9247FEFE2060FA7800F25884 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
-		9247FEFF2060FA7800F25884 /* HandheldTransformModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandheldTransformModel.h; sourceTree = "<group>"; };
-		9247FF002060FA7800F25884 /* TargetFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetFinder.h; sourceTree = "<group>"; };
-		9247FF012060FA7800F25884 /* Matrices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrices.h; sourceTree = "<group>"; };
-		9247FF022060FA7800F25884 /* Rectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rectangle.h; sourceTree = "<group>"; };
-		9247FF032060FA7800F25884 /* CylinderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CylinderTarget.h; sourceTree = "<group>"; };
-		9247FF042060FA7800F25884 /* CameraField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraField.h; sourceTree = "<group>"; };
-		9247FF052060FA7800F25884 /* DeviceTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceTracker.h; sourceTree = "<group>"; };
-		9247FF062060FA7800F25884 /* CameraDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraDevice.h; sourceTree = "<group>"; };
-		9247FF072060FA7800F25884 /* HitTestResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestResult.h; sourceTree = "<group>"; };
-		9247FF082060FA7800F25884 /* WordResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordResult.h; sourceTree = "<group>"; };
-		9247FF092060FA7800F25884 /* TransformModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformModel.h; sourceTree = "<group>"; };
-		9247FF0A2060FA7800F25884 /* DeviceTrackable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceTrackable.h; sourceTree = "<group>"; };
-		9247FF0B2060FA7800F25884 /* State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = State.h; sourceTree = "<group>"; };
-		9247FF0C2060FA7800F25884 /* Tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
-		9247FF0D2060FA7800F25884 /* VideoBackgroundConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoBackgroundConfig.h; sourceTree = "<group>"; };
-		9247FF0E2060FA7800F25884 /* CameraCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraCalibration.h; sourceTree = "<group>"; };
-		9247FF0F2060FA7800F25884 /* AnchorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnchorResult.h; sourceTree = "<group>"; };
-		9247FF102060FA7800F25884 /* Word.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Word.h; sourceTree = "<group>"; };
-		9247FF112060FA7800F25884 /* ViewerParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewerParameters.h; sourceTree = "<group>"; };
-		9247FF122060FA7800F25884 /* ImageTargetResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTargetResult.h; sourceTree = "<group>"; };
-		9247FF132060FA7800F25884 /* ViewList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewList.h; sourceTree = "<group>"; };
-		9247FF142060FA7800F25884 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
-		9247FF152060FA7800F25884 /* RenderingPrimitives.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderingPrimitives.h; sourceTree = "<group>"; };
-		9247FF162060FA7800F25884 /* StateUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateUpdater.h; sourceTree = "<group>"; };
-		9247FF172060FA7800F25884 /* ImageTargetBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTargetBuilder.h; sourceTree = "<group>"; };
-		9247FF182060FA7800F25884 /* ObjectTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectTarget.h; sourceTree = "<group>"; };
-		9247FF1B2060FA7800F25884 /* libVuforia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libVuforia.a; sourceTree = "<group>"; };
+		3703D8F721B6F88900C13C84 /* Vuforia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vuforia.framework; path = "VuforiaSampleSwift/vuforia-sdk-ios-7-5-20/build/Vuforia.framework"; sourceTree = "<group>"; };
 		926096D31D4163B600510C24 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		9275279A1FC2CE5200CE7DCE /* Background.fragsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Background.fragsh; sourceTree = "<group>"; };
 		9275279B1FC2CE5200CE7DCE /* Background.vertsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Background.vertsh; sourceTree = "<group>"; };
@@ -190,174 +115,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				926096D41D4163B600510C24 /* SpriteKit.framework in Frameworks */,
+				3703D8F921B6F89100C13C84 /* Vuforia.framework in Frameworks */,
 				927B770B1D282E0A00C4F5CC /* MediaPlayer.framework in Frameworks */,
 				927B77091D282DF100C4F5CC /* AudioToolbox.framework in Frameworks */,
 				927B77081D2824AB00C4F5CC /* OpenGLES.framework in Frameworks */,
 				927B76DE1D27FE0500C4F5CC /* CoreMedia.framework in Frameworks */,
-				9247FF1F2060FA7800F25884 /* libVuforia.a in Frameworks */,
 				927B76DB1D27FDE500C4F5CC /* SceneKit.framework in Frameworks */,
 				927B76DC1D27FDE500C4F5CC /* SystemConfiguration.framework in Frameworks */,
 				927B76D71D27FDC600C4F5CC /* AVFoundation.framework in Frameworks */,
 				927B76D81D27FDC600C4F5CC /* CoreMotion.framework in Frameworks */,
+				3703D8F821B6F88900C13C84 /* Vuforia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9247FEBB2060FA7800F25884 /* vuforia-sdk-ios-7-0-50 */ = {
-			isa = PBXGroup;
-			children = (
-				9247FEBC2060FA7800F25884 /* licenses */,
-				9247FEBE2060FA7800F25884 /* samples */,
-				9247FEC02060FA7800F25884 /* readme.txt */,
-				9247FEC12060FA7800F25884 /* build */,
-			);
-			name = "vuforia-sdk-ios-7-0-50";
-			path = "VuforiaSampleSwift/vuforia-sdk-ios-7-0-50";
-			sourceTree = SOURCE_ROOT;
-		};
-		9247FEBC2060FA7800F25884 /* licenses */ = {
-			isa = PBXGroup;
-			children = (
-				9247FEBD2060FA7800F25884 /* license_3rdpartynotice.txt */,
-			);
-			path = licenses;
-			sourceTree = "<group>";
-		};
-		9247FEBE2060FA7800F25884 /* samples */ = {
-			isa = PBXGroup;
-			children = (
-				9247FEBF2060FA7800F25884 /* readme.txt */,
-			);
-			path = samples;
-			sourceTree = "<group>";
-		};
-		9247FEC12060FA7800F25884 /* build */ = {
-			isa = PBXGroup;
-			children = (
-				9247FEC22060FA7800F25884 /* include */,
-				9247FF192060FA7800F25884 /* lib */,
-			);
-			path = build;
-			sourceTree = "<group>";
-		};
-		9247FEC22060FA7800F25884 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				9247FEC32060FA7800F25884 /* Vuforia */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		9247FEC32060FA7800F25884 /* Vuforia */ = {
-			isa = PBXGroup;
-			children = (
-				9247FEC42060FA7800F25884 /* Type.h */,
-				9247FEC52060FA7800F25884 /* MetalRenderer.h */,
-				9247FEC62060FA7800F25884 /* VuMarkTarget.h */,
-				9247FEC72060FA7800F25884 /* GLRenderer.h */,
-				9247FEC82060FA7800F25884 /* TrackableSource.h */,
-				9247FEC92060FA7800F25884 /* Obb3D.h */,
-				9247FECA2060FA7800F25884 /* Vuforia_iOS.h */,
-				9247FECB2060FA7800F25884 /* VideoBackgroundTextureInfo.h */,
-				9247FECC2060FA7800F25884 /* WordList.h */,
-				9247FECD2060FA7800F25884 /* CylinderTargetResult.h */,
-				9247FECE2060FA7800F25884 /* Device.h */,
-				9247FECF2060FA7800F25884 /* CustomViewerParameters.h */,
-				9247FED02060FA7800F25884 /* Obb2D.h */,
-				9247FED12060FA7800F25884 /* ModelTarget.h */,
-				9247FED22060FA7800F25884 /* Anchor.h */,
-				9247FED32060FA7800F25884 /* InstanceId.h */,
-				9247FED42060FA7800F25884 /* VideoMode.h */,
-				9247FED52060FA7800F25884 /* TrackableResult.h */,
-				9247FED62060FA7800F25884 /* RotationalDeviceTracker.h */,
-				9247FED72060FA7800F25884 /* ObjectTargetResult.h */,
-				9247FED82060FA7800F25884 /* TextTracker.h */,
-				9247FED92060FA7800F25884 /* TargetSearchResult.h */,
-				9247FEDA2060FA7800F25884 /* MultiTarget.h */,
-				9247FEDB2060FA7800F25884 /* Frame.h */,
-				9247FEDC2060FA7800F25884 /* Renderer.h */,
-				9247FEDD2060FA7800F25884 /* Box3D.h */,
-				9247FEDE2060FA7800F25884 /* Vectors.h */,
-				9247FEDF2060FA7800F25884 /* Mesh.h */,
-				9247FEE02060FA7800F25884 /* View.h */,
-				9247FEE12060FA7800F25884 /* VuMarkTargetResult.h */,
-				9247FEE22060FA7800F25884 /* Area.h */,
-				9247FEE32060FA7800F25884 /* GuideView.h */,
-				9247FEE42060FA7800F25884 /* ObjectTracker.h */,
-				9247FEE52060FA7800F25884 /* EyewearCalibrationProfileManager.h */,
-				9247FEE62060FA7800F25884 /* DeviceTrackableResult.h */,
-				9247FEE72060FA7800F25884 /* VirtualButtonResult.h */,
-				9247FEE82060FA7800F25884 /* Illumination.h */,
-				9247FEE92060FA7800F25884 /* DataSet.h */,
-				9247FEEA2060FA7800F25884 /* EyewearCalibrationReading.h */,
-				9247FEEB2060FA7800F25884 /* ModelTargetResult.h */,
-				9247FEEC2060FA7800F25884 /* EyeID.h */,
-				9247FEED2060FA7800F25884 /* SmartTerrain.h */,
-				9247FEEE2060FA7800F25884 /* EyewearUserCalibrator.h */,
-				9247FEEF2060FA7800F25884 /* NonCopyable.h */,
-				9247FEF02060FA7800F25884 /* HeadTransformModel.h */,
-				9247FEF12060FA7800F25884 /* ImageTarget.h */,
-				9247FEF22060FA7800F25884 /* PositionalDeviceTracker.h */,
-				9247FEF32060FA7800F25884 /* Vuforia.h */,
-				9247FEF42060FA7800F25884 /* VuMarkTemplate.h */,
-				9247FEF52060FA7800F25884 /* TrackerManager.h */,
-				9247FEF62060FA7800F25884 /* VirtualButton.h */,
-				9247FEF72060FA7800F25884 /* Trackable.h */,
-				9247FEF82060FA7800F25884 /* UpdateCallback.h */,
-				9247FEF92060FA7800F25884 /* EyewearDevice.h */,
-				9247FEFA2060FA7800F25884 /* UIGLViewProtocol.h */,
-				9247FEFB2060FA7800F25884 /* ViewerParametersList.h */,
-				9247FEFC2060FA7800F25884 /* MultiTargetResult.h */,
-				9247FEFD2060FA7800F25884 /* Tool.h */,
-				9247FEFE2060FA7800F25884 /* System.h */,
-				9247FEFF2060FA7800F25884 /* HandheldTransformModel.h */,
-				9247FF002060FA7800F25884 /* TargetFinder.h */,
-				9247FF012060FA7800F25884 /* Matrices.h */,
-				9247FF022060FA7800F25884 /* Rectangle.h */,
-				9247FF032060FA7800F25884 /* CylinderTarget.h */,
-				9247FF042060FA7800F25884 /* CameraField.h */,
-				9247FF052060FA7800F25884 /* DeviceTracker.h */,
-				9247FF062060FA7800F25884 /* CameraDevice.h */,
-				9247FF072060FA7800F25884 /* HitTestResult.h */,
-				9247FF082060FA7800F25884 /* WordResult.h */,
-				9247FF092060FA7800F25884 /* TransformModel.h */,
-				9247FF0A2060FA7800F25884 /* DeviceTrackable.h */,
-				9247FF0B2060FA7800F25884 /* State.h */,
-				9247FF0C2060FA7800F25884 /* Tracker.h */,
-				9247FF0D2060FA7800F25884 /* VideoBackgroundConfig.h */,
-				9247FF0E2060FA7800F25884 /* CameraCalibration.h */,
-				9247FF0F2060FA7800F25884 /* AnchorResult.h */,
-				9247FF102060FA7800F25884 /* Word.h */,
-				9247FF112060FA7800F25884 /* ViewerParameters.h */,
-				9247FF122060FA7800F25884 /* ImageTargetResult.h */,
-				9247FF132060FA7800F25884 /* ViewList.h */,
-				9247FF142060FA7800F25884 /* Image.h */,
-				9247FF152060FA7800F25884 /* RenderingPrimitives.h */,
-				9247FF162060FA7800F25884 /* StateUpdater.h */,
-				9247FF172060FA7800F25884 /* ImageTargetBuilder.h */,
-				9247FF182060FA7800F25884 /* ObjectTarget.h */,
-			);
-			path = Vuforia;
-			sourceTree = "<group>";
-		};
-		9247FF192060FA7800F25884 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				9247FF1A2060FA7800F25884 /* arm */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
-		9247FF1A2060FA7800F25884 /* arm */ = {
-			isa = PBXGroup;
-			children = (
-				9247FF1B2060FA7800F25884 /* libVuforia.a */,
-			);
-			path = arm;
-			sourceTree = "<group>";
-		};
 		927527971FC2BE0400CE7DCE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,6 +150,7 @@
 		927B76DF1D27FE5900C4F5CC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3703D8F721B6F88900C13C84 /* Vuforia.framework */,
 				926096D31D4163B600510C24 /* SpriteKit.framework */,
 				927B770A1D282E0A00C4F5CC /* MediaPlayer.framework */,
 				927B77071D2824AB00C4F5CC /* OpenGLES.framework */,
@@ -462,7 +236,6 @@
 				92AA11111D27A5EB00E56CBE /* LaunchScreen.storyboard */,
 				92AA11141D27A5EB00E56CBE /* Info.plist */,
 				92AA11841D27B96300E56CBE /* Localizable.strings */,
-				9247FEBB2060FA7800F25884 /* vuforia-sdk-ios-7-0-50 */,
 				927B76DF1D27FE5900C4F5CC /* Frameworks */,
 			);
 			path = VuforiaSampleSwift;
@@ -491,6 +264,7 @@
 				92AA11011D27A5EB00E56CBE /* Sources */,
 				92AA11021D27A5EB00E56CBE /* Frameworks */,
 				92AA11031D27A5EB00E56CBE /* Resources */,
+				3703D8FB21B6F89200C13C84 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -508,12 +282,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Yoshihiro Kato";
 				TargetAttributes = {
 					92AA11041D27A5EB00E56CBE = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 7A4SW8L4U6;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -546,9 +319,7 @@
 				928C34361EAF69EB00BC07DE /* Vuforia.dat in Resources */,
 				9275279C1FC2CE5200CE7DCE /* Background.fragsh in Resources */,
 				9275279D1FC2CE5200CE7DCE /* Background.vertsh in Resources */,
-				9247FF1D2060FA7800F25884 /* readme.txt in Resources */,
 				92AA11131D27A5EB00E56CBE /* LaunchScreen.storyboard in Resources */,
-				9247FF1E2060FA7800F25884 /* readme.txt in Resources */,
 				928C34321EAF69EB00BC07DE /* reticle@2x.png in Resources */,
 				92AA11101D27A5EB00E56CBE /* Assets.xcassets in Resources */,
 				92DCE9BD1E37CEA400E0DE1C /* StonesAndChips.dat in Resources */,
@@ -565,7 +336,6 @@
 				92AA110E1D27A5EB00E56CBE /* Main.storyboard in Resources */,
 				928C34341EAF69EB00BC07DE /* VM.png in Resources */,
 				92DCE9BC1E37CEA400E0DE1C /* IT_about.html in Resources */,
-				9247FF1C2060FA7800F25884 /* license_3rdpartynotice.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,14 +386,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -664,14 +442,22 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -702,9 +488,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7A4SW8L4U6;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VuforiaSampleSwift/vuforia-sdk-ios-7-5-20/build",
+				);
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/VuforiaSampleSwift/vuforia-sdk-ios-7-0-50/build/include\"";
 				INFOPLIST_FILE = VuforiaSampleSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -714,9 +506,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sputnik-apps.VuforiaSampleSwift";
 				PRODUCT_NAME = VuforiaSampleSwift;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VuforiaSampleSwift/VuforiaSampleSwift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -726,9 +520,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7A4SW8L4U6;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VuforiaSampleSwift/vuforia-sdk-ios-7-5-20/build",
+				);
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/VuforiaSampleSwift/vuforia-sdk-ios-7-0-50/build/include\"";
 				INFOPLIST_FILE = VuforiaSampleSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -738,8 +538,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sputnik-apps.VuforiaSampleSwift";
 				PRODUCT_NAME = VuforiaSampleSwift;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VuforiaSampleSwift/VuforiaSampleSwift-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;

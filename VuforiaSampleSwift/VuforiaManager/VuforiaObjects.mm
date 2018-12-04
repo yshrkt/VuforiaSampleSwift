@@ -62,10 +62,10 @@
 
 - (VuforiaTrackableResultStatus)status {
     switch (_result->getStatus()) {
-        case Vuforia::TrackableResult::STATUS::UNKNOWN:
-            return VuforiaTrackableResultStatus_Unknown;
-        case Vuforia::TrackableResult::STATUS::UNDEFINED:
-            return VuforiaTrackableResultStatus_Undefined;
+        case Vuforia::TrackableResult::STATUS::NO_POSE:
+            return VuforiaTrackableResultStatus_No_Pose;
+        case Vuforia::TrackableResult::STATUS::LIMITED:
+            return VuforiaTrackableResultStatus_Limited;
         case Vuforia::TrackableResult::STATUS::DETECTED:
             return VuforiaTrackableResultStatus_Detected;
         case Vuforia::TrackableResult::STATUS::TRACKED:

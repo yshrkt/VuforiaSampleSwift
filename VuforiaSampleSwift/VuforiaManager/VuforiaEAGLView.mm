@@ -33,6 +33,7 @@
 #import <Vuforia/RenderingPrimitives.h>
 #import <Vuforia/Device.h>
 #import <Vuforia/TrackableResult.h>
+#import <Vuforia/DeviceTrackableResult.h>
 
 #import "VuforiaShaderUtils.h"
 
@@ -41,36 +42,40 @@ namespace VuforiaEAGLViewUtils
 {
     // Print a 4x4 matrix
     void printMatrix(const float* matrix);
-    
+
     // Print GL error information
     void checkGlError(const char* operation);
-    
+
     // Set the rotation components of a 4x4 matrix
     void setRotationMatrix(float angle, float x, float y, float z,
                            float *nMatrix);
-    
+
     // Set the translation components of a 4x4 matrix
     void translatePoseMatrix(float x, float y, float z,
                              float* nMatrix = NULL);
-    
+
     // Apply a rotation
     void rotatePoseMatrix(float angle, float x, float y, float z,
                           float* nMatrix = NULL);
-    
+
     // Apply a scaling transformation
     void scalePoseMatrix(float x, float y, float z,
                          float* nMatrix = NULL);
-    
+
     // Multiply the two matrices A and B and write the result to C
     void multiplyMatrix(float *matrixA, float *matrixB,
                         float *matrixC);
-    
+
     void setOrthoMatrix(float nLeft, float nRight, float nBottom, float nTop,
                         float nNear, float nFar, float *nProjMatrix);
-    
-    void screenCoordToCameraCoord(int screenX, int screenY, int screenDX, int screenDY,
-                                  int screenWidth, int screenHeight, int cameraWidth, int cameraHeight,
-                                  int * cameraX, int* cameraY, int * cameraDX, int * cameraDY);
+
+    // void screenCoordToCameraCoord(int screenX, int screenY, int screenDX, int screenDY,
+    //                               int screenWidth, int screenHeight, int cameraWidth, int cameraHeight,
+    //                               int * cameraX, int* cameraY, int * cameraDX, int * cameraDY);
+
+    Vuforia::Matrix44F identityMatrix();
+    Vuforia::Matrix44F transposeMatrix(const Vuforia::Matrix44F& m);
+    Vuforia::Matrix44F inverseMatrix(const Vuforia::Matrix44F& m);
 }
 
 
@@ -105,30 +110,27 @@ namespace VuforiaEAGLViewUtils
 
 @implementation VuforiaEAGLView {
     __weak VuforiaManager* _manager;
-    
+
     // OpenGL ES context
     EAGLContext* _context;
-    
+
     // The OpenGL ES names for the framebuffer and renderbuffers used to render
     // to this view
     GLuint _defaultFramebuffer;
     GLuint _colorRenderbuffer;
     GLuint _depthRenderbuffer;
-    
-    
-    BOOL _offTargetTrackingEnabled;
-    
+
     SCNRenderer* _renderer; // Renderer
     SCNNode* _cameraNode; // Camera Node
     CFAbsoluteTime _startTime; // Start Time
-    
+
     SCNNode* _currentTouchNode;
-    
+
     SCNMatrix4 _projectionTransform;
-    
+
     CGFloat _nearPlane;
     CGFloat _farPlane;
-    
+
     GLuint _vbShaderProgramID;
     GLint _vbVertexHandle;
     GLint _vbTexCoordHandle;
@@ -152,32 +154,31 @@ namespace VuforiaEAGLViewUtils
 - (id)initWithFrame:(CGRect)frame manager:(VuforiaManager *)manager
 {
     self = [super initWithFrame:frame];
-    
+
     if (self) {
         _manager = manager;
         // Enable retina mode if available on this device
         if (YES == [_manager isRetinaDisplay]) {
             [self setContentScaleFactor:[UIScreen mainScreen].nativeScale];
         }
-        
+
         // Create the OpenGL ES context
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-        
+
         // The EAGLContext must be set for each thread that wishes to use it.
         // Set it the first time this method is called (on the main thread)
         if (_context != [EAGLContext currentContext]) {
             [EAGLContext setCurrentContext:_context];
         }
-        
-        _offTargetTrackingEnabled = NO;
+
         _objectScale = 0.03175f;
-        
+
         _nearPlane = 0.01;
         _farPlane = 5;
-        
+
         [self initRendering];
     }
-    
+
     return self;
 }
 
@@ -185,7 +186,7 @@ namespace VuforiaEAGLViewUtils
     // Video background rendering
     _vbShaderProgramID = [VuforiaShaderUtils createProgramWithVertexShaderFileName:@"Background.vertsh"
                                                                 fragmentShaderFileName:@"Background.fragsh"];
-    
+
     if (0 < _vbShaderProgramID) {
         _vbVertexHandle = glGetAttribLocation(_vbShaderProgramID, "vertexPosition");
         _vbTexCoordHandle = glGetAttribLocation(_vbShaderProgramID, "vertexTexCoord");
@@ -195,14 +196,14 @@ namespace VuforiaEAGLViewUtils
     else {
         NSLog(@"Could not initialise video background shader");
     }
-    
+
 }
 
 
 - (void)dealloc
 {
     [self deleteFramebuffer];
-    
+
     // Tear down context
     if ([EAGLContext currentContext] == _context) {
         [EAGLContext setCurrentContext:nil];
@@ -219,11 +220,11 @@ namespace VuforiaEAGLViewUtils
     _renderer = [SCNRenderer rendererWithContext:_context options:nil];
     //_renderer.autoenablesDefaultLighting = YES;
     _renderer.playing = YES;
-    
+
     if (_sceneSource != nil) {
         [self setNeedsChangeSceneWithUserInfo:nil];
     }
-    
+
 }
 
 - (void)setNeedsChangeSceneWithUserInfo: (NSDictionary*)userInfo {
@@ -231,13 +232,13 @@ namespace VuforiaEAGLViewUtils
     if (scene == nil) {
         return;
     }
-    
+
     SCNCamera* camera = [SCNCamera camera];
     _cameraNode = [SCNNode node];
     _cameraNode.camera = camera;
     _cameraNode.camera.projectionTransform = _projectionTransform;
     [scene.rootNode addChildNode:_cameraNode];
-    
+
     _renderer.scene = scene;
     _renderer.pointOfView = _cameraNode;
 }
@@ -263,20 +264,16 @@ namespace VuforiaEAGLViewUtils
     glFinish();
 }
 
-- (void) setOffTargetTrackingMode:(BOOL) enabled {
-    _offTargetTrackingEnabled = enabled;
-}
-
 // Convert Vuforia's matrix to SceneKit's matrix
 - (SCNMatrix4)SCNMatrix4FromVuforiaMatrix44:(Vuforia::Matrix44F)matrix {
     GLKMatrix4 glkMatrix;
-    
+
     for(int i=0; i<16; i++) {
         glkMatrix.m[i] = matrix.data[i];
     }
-    
+
     return SCNMatrix4FromGLKMatrix4(glkMatrix);
-    
+
 }
 
 // Set camera node matrix
@@ -284,7 +281,7 @@ namespace VuforiaEAGLViewUtils
     SCNMatrix4 extrinsic = [self SCNMatrix4FromVuforiaMatrix44:matrix];
     SCNMatrix4 inverted = SCNMatrix4Invert(extrinsic);
     _cameraNode.transform = inverted;
-    
+
     //NSLog(@"position = %lf, %lf, %lf", _cameraNode.position.x, _cameraNode.position.y, _cameraNode.position.z); // for Debug
 }
 
@@ -307,68 +304,66 @@ namespace VuforiaEAGLViewUtils
     if(!_manager.isCameraStarted) {
         return;
     }
-    
+
     // Render video background and retrieve tracking state
     const Vuforia::State state = Vuforia::TrackerManager::getInstance().getStateUpdater().updateState();
     Vuforia::Renderer::getInstance().begin(state);
-    
-    
+
+
     if(Vuforia::Renderer::getInstance().getVideoBackgroundConfig().mReflection == Vuforia::VIDEO_BACKGROUND_REFLECTION_ON)
         glFrontFace(GL_CW);  //Front camera
     else
         glFrontFace(GL_CCW);   //Back camera
-    
+
     if(_currentRenderingPrimitives == nullptr)
         [self updateRenderingPrimitives];
-    
+
     Vuforia::ViewList& viewList = _currentRenderingPrimitives->getRenderingViews();
-    
+
     // Clear colour and depth buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    
+
     // Iterate over the ViewList
     for (int viewIdx = 0; viewIdx < viewList.getNumViews(); viewIdx++) {
         Vuforia::VIEW vw = viewList.getView(viewIdx);
         _currentView = vw;
-        
+
         // Set up the viewport
         Vuforia::Vec4I viewport;
         // We're writing directly to the screen, so the viewport is relative to the screen
         viewport = _currentRenderingPrimitives->getViewport(vw);
-        
+
         // Set viewport for current view
         glViewport(viewport.data[0], viewport.data[1], viewport.data[2], viewport.data[3]);
-        
+
         //set scissor
         glScissor(viewport.data[0], viewport.data[1], viewport.data[2], viewport.data[3]);
-        
-        Vuforia::Matrix34F projMatrix = _currentRenderingPrimitives->getProjectionMatrix(vw,
-                                                                                         Vuforia::COORDINATE_SYSTEM_CAMERA,
-                                                                                         state.getCameraCalibration());
-        
+
+        Vuforia::Matrix34F projMatrix = _currentRenderingPrimitives->getProjectionMatrix(vw, state.getCameraCalibration());
+
         Vuforia::Matrix44F rawProjectionMatrixGL = Vuforia::Tool::convertPerspectiveProjection2GLMatrix(
                                                                                                         projMatrix,
                                                                                                         _nearPlane,
                                                                                                         _farPlane);
-        
+
         // Apply the appropriate eye adjustment to the raw projection matrix, and assign to the global variable
         Vuforia::Matrix44F eyeAdjustmentGL = Vuforia::Tool::convert2GLMatrix(_currentRenderingPrimitives->getEyeDisplayAdjustmentMatrix(vw));
-        
+
         Vuforia::Matrix44F projectionMatrix;
         VuforiaEAGLViewUtils::multiplyMatrix(&rawProjectionMatrixGL.data[0], &eyeAdjustmentGL.data[0], &projectionMatrix.data[0]);
-        
+
         if (_currentView != Vuforia::VIEW_POSTPROCESS) {
             [self renderFrameWithState:state projectMatrix:projectionMatrix];
         }
-        
+
         glDisable(GL_SCISSOR_TEST);
-        
+
     }
-    
+
     Vuforia::Renderer::getInstance().end();
 }
 
@@ -380,130 +375,140 @@ namespace VuforiaEAGLViewUtils
 
 - (void) renderFrameWithState:(const Vuforia::State&) state projectMatrix:(Vuforia::Matrix44F&) projectionMatrix {
     [self setFramebuffer];
-    
+
     // Clear colour and depth buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     // Render video background and retrieve tracking state
-    [self renderVideoBackground];
-    
+    [self renderVideoBackgroundWithState:state];
+
     glEnable(GL_DEPTH_TEST);
     // We must detect if background reflection is active and adjust the culling direction.
     // If the reflection is active, this means the pose matrix has been reflected as well,
     // therefore standard counter clockwise face culling will result in "inside out" models.
-    if (_offTargetTrackingEnabled) {
-        glDisable(GL_CULL_FACE);
-    } else {
-        glEnable(GL_CULL_FACE);
-    }
-    
+    glEnable(GL_CULL_FACE);
+
     glCullFace(GL_BACK);
     if(Vuforia::Renderer::getInstance().getVideoBackgroundConfig().mReflection == Vuforia::VIDEO_BACKGROUND_REFLECTION_ON)
         glFrontFace(GL_CW);  //Front camera
     else
         glFrontFace(GL_CCW);   //Back camera
-    
+
     // Set the viewport
     glViewport((GLint)_manager.viewport.origin.x, (GLint)_manager.viewport.origin.y,
                (GLsizei)_manager.viewport.size.width, (GLsizei)_manager.viewport.size.height);
     
+    Vuforia::Matrix44F devicePoseMatrix = VuforiaEAGLViewUtils::identityMatrix();
+    
+    if (state.getDeviceTrackableResult() != nullptr && state.getDeviceTrackableResult()->getStatus() != Vuforia::TrackableResult::NO_POSE) {
+        Vuforia::Matrix44F deviceMatrix = Vuforia::Tool::convertPose2GLMatrix(state.getDeviceTrackableResult()->getPose());
+        devicePoseMatrix = VuforiaEAGLViewUtils::transposeMatrix(VuforiaEAGLViewUtils::inverseMatrix(deviceMatrix));
+    }
+
     for (int i = 0; i < state.getNumTrackableResults(); ++i) {
         // Get the trackable
         const Vuforia::TrackableResult* result = state.getTrackableResult(i);
-        
+
         Vuforia::Matrix44F modelViewMatrix = Vuforia::Tool::convertPose2GLMatrix(result->getPose()); // get model view matrix
-        
+
         VuforiaEAGLViewUtils::translatePoseMatrix(0.0f, 0.0f, _objectScale, &modelViewMatrix.data[0]);
         VuforiaEAGLViewUtils::scalePoseMatrix(_objectScale,  _objectScale,  _objectScale, &modelViewMatrix.data[0]);
+        VuforiaEAGLViewUtils::multiplyMatrix(&devicePoseMatrix.data[0],&modelViewMatrix.data[0],&modelViewMatrix.data[0]);
         
+        [self setProjectionMatrix:projectionMatrix];
         [self setCameraMatrix:modelViewMatrix]; // set camera matrix to SCNCamera
-		
+
         [SCNTransaction flush];
-		
+
         CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent() - _startTime;
         [_renderer renderAtTime: currentTime]; // render using SCNRenderer
-        
+
         VuforiaEAGLViewUtils::checkGlError("EAGLView renderFrameVuforia");
     }
-    
+
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-    
+
     [self presentFramebuffer];
 }
 
-- (void) renderVideoBackground {
+- (void) renderVideoBackgroundWithState:(const Vuforia::State&)state {
     if (_currentView == Vuforia::VIEW_POSTPROCESS) {
         return;
     }
-    
+
     // Use texture unit 0 for the video background - this will hold the camera frame and we want to reuse for all views
     // So need to use a different texture unit for the augmentation
     int vbVideoTextureUnit = 0;
-    
+
     // Bind the video bg texture and get the Texture ID from Vuforia
     Vuforia::GLTextureUnit tex;
     tex.mTextureUnit = vbVideoTextureUnit;
-    
+
     if (! Vuforia::Renderer::getInstance().updateVideoBackgroundTexture(&tex))
     {
         NSLog(@"Unable to bind video background texture!!");
         return;
     }
-    
-    Vuforia::Matrix44F vbProjectionMatrix = Vuforia::Tool::convert2GLMatrix(_currentRenderingPrimitives->getVideoBackgroundProjectionMatrix(_currentView, Vuforia::COORDINATE_SYSTEM_CAMERA));
-    
+
+    Vuforia::Matrix44F vbProjectionMatrix = Vuforia::Tool::convert2GLMatrix(_currentRenderingPrimitives->getVideoBackgroundProjectionMatrix(_currentView));
+
     // Apply the scene scale on video see-through eyewear, to scale the video background and augmentation
     // so that the display lines up with the real world
     // This should not be applied on optical see-through devices, as there is no video background,
     // and the calibration ensures that the augmentation matches the real world
     if (Vuforia::Device::getInstance().isViewerActive())
     {
-        float sceneScaleFactor = [self getSceneScaleFactorWithViewId:_currentView];
+        float sceneScaleFactor = [self getSceneScaleFactorWithViewId:_currentView cameraCalibration:state.getCameraCalibration()];
         VuforiaEAGLViewUtils::scalePoseMatrix(sceneScaleFactor, sceneScaleFactor, 1.0f, vbProjectionMatrix.data);
     }
-    
+
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glDisable(GL_SCISSOR_TEST);
-    
+
     const Vuforia::Mesh& vbMesh = _currentRenderingPrimitives->getVideoBackgroundMesh(_currentView);
     // Load the shader and upload the vertex/texcoord/index data
     glUseProgram(_vbShaderProgramID);
     glVertexAttribPointer(_vbVertexHandle, 3, GL_FLOAT, false, 0, vbMesh.getPositionCoordinates());
     glVertexAttribPointer(_vbTexCoordHandle, 2, GL_FLOAT, false, 0, vbMesh.getUVCoordinates());
-    
+
     glUniform1i(_vbTexSampler2DHandle, vbVideoTextureUnit);
-    
+
     // Render the video background with the custom shader
     // First, we enable the vertex arrays
     glEnableVertexAttribArray(_vbVertexHandle);
     glEnableVertexAttribArray(_vbTexCoordHandle);
-    
+
     // Pass the projection matrix to OpenGL
     glUniformMatrix4fv(_vbProjectionMatrixHandle, 1, GL_FALSE, vbProjectionMatrix.data);
-    
+
     // Then, we issue the render call
     glDrawElements(GL_TRIANGLES, vbMesh.getNumTriangles() * 3, GL_UNSIGNED_SHORT,
                    vbMesh.getTriangles());
-    
+
     // Finally, we disable the vertex arrays
     glDisableVertexAttribArray(_vbVertexHandle);
     glDisableVertexAttribArray(_vbTexCoordHandle);
-    
+
     VuforiaEAGLViewUtils::checkGlError("Rendering of the video background failed");
 }
 
--(float) getSceneScaleFactorWithViewId:(Vuforia::VIEW)viewId
+-(float)getSceneScaleFactorWithViewId:(Vuforia::VIEW)viewId cameraCalibration:(const Vuforia::CameraCalibration*)cameraCalib
 {
-    // Get the y-dimension of the physical camera field of view
-    Vuforia::Vec2F fovVector = Vuforia::CameraDevice::getInstance().getCameraCalibration().getFieldOfViewRads();
-    float cameraFovYRads = fovVector.data[1];
+    if (cameraCalib == nullptr) {
+        NSLog(@"Cannot compute scene scale factor, camera calibration is invalid");
+        return 0.0f;
+    }
     
+    // Get the y-dimension of the physical camera field of view
+    Vuforia::Vec2F fovVector = cameraCalib->getFieldOfViewRads();
+    float cameraFovYRads = fovVector.data[1];
+
     // Get the y-dimension of the virtual camera field of view
     Vuforia::Vec4F virtualFovVector = _currentRenderingPrimitives->getEffectiveFov(viewId); // {left, right, bottom, top}
     float virtualFovYRads = virtualFovVector.data[2] + virtualFovVector.data[3];
-    
+
     // The scene-scale factor represents the proportion of the viewport that is filled by
     // the video background when projected onto the same plane.
     // In order to calculate this, let 'd' be the distance between the cameras and the plane.
@@ -537,18 +542,18 @@ namespace VuforiaEAGLViewUtils
         _currentTouchNode = result;
         [self.delegate vuforiaEAGLView:self didTouchDownNode:result];
     }
-    
+
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    
+
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if(!_currentTouchNode) {
         return;
     }
-    
+
     CGPoint pos = [touches.anyObject locationInView:self];
     SCNNode* result = [self touchedNodeWithLocationInView:pos];
     if(_currentTouchNode == result){
@@ -575,27 +580,27 @@ namespace VuforiaEAGLViewUtils
         // Create default framebuffer object
         glGenFramebuffers(1, &_defaultFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
-        
+
         // Create colour renderbuffer and allocate backing store
         glGenRenderbuffers(1, &_colorRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
-        
+
         // Allocate the renderbuffer's storage (shared with the drawable object)
         [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
         GLint framebufferWidth;
         GLint framebufferHeight;
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &framebufferWidth);
         glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &framebufferHeight);
-        
+
         // Create the depth render buffer and allocate storage
         glGenRenderbuffers(1, &_depthRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, framebufferWidth, framebufferHeight);
-        
+
         // Attach colour and depth render buffers to the frame buffer
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderbuffer);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderbuffer);
-        
+
         // Leave the colour render buffer bound so future rendering operations will act on it
         glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
     }
@@ -606,17 +611,17 @@ namespace VuforiaEAGLViewUtils
 {
     if (_context) {
         [EAGLContext setCurrentContext:_context];
-        
+
         if (_defaultFramebuffer) {
             glDeleteFramebuffers(1, &_defaultFramebuffer);
             _defaultFramebuffer = 0;
         }
-        
+
         if (_colorRenderbuffer) {
             glDeleteRenderbuffers(1, &_colorRenderbuffer);
             _colorRenderbuffer = 0;
         }
-        
+
         if (_depthRenderbuffer) {
             glDeleteRenderbuffers(1, &_depthRenderbuffer);
             _depthRenderbuffer = 0;
@@ -632,14 +637,14 @@ namespace VuforiaEAGLViewUtils
     if (_context != [EAGLContext currentContext]) {
         [EAGLContext setCurrentContext:_context];
     }
-    
+
     if (!_defaultFramebuffer) {
         // Perform on the main thread to ensure safe memory allocation for the
         // shared buffer.  Block until the operation is complete to prevent
         // simultaneous access to the OpenGL context
         [self performSelectorOnMainThread:@selector(createFramebuffer) withObject:self waitUntilDone:YES];
     }
-    
+
     glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
 }
 
@@ -648,10 +653,10 @@ namespace VuforiaEAGLViewUtils
 {
     // setFramebuffer must have been called before presentFramebuffer, therefore
     // we know the context is valid and has been set for this (render) thread
-    
+
     // Bind the colour render buffer and present it
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
-    
+
     return [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
@@ -668,8 +673,8 @@ namespace VuforiaEAGLViewUtils
             printf("%7.3f %7.3f %7.3f %7.3f", mat[0], mat[1], mat[2], mat[3]);
         }
     }
-    
-    
+
+
     // Print GL error information
     void
     checkGlError(const char* operation)
@@ -678,8 +683,8 @@ namespace VuforiaEAGLViewUtils
             printf("after %s() glError (0x%x)\n", operation, error);
         }
     }
-    
-    
+
+
     // Set the rotation components of a 4x4 matrix
     void
     setRotationMatrix(float angle, float x, float y, float z,
@@ -687,39 +692,39 @@ namespace VuforiaEAGLViewUtils
     {
         double radians, c, s, c1, u[3], length;
         int i, j;
-        
+
         radians = (angle * M_PI) / 180.0;
-        
+
         c = cos(radians);
         s = sin(radians);
-        
+
         c1 = 1.0 - cos(radians);
-        
+
         length = sqrt(x * x + y * y + z * z);
-        
+
         u[0] = x / length;
         u[1] = y / length;
         u[2] = z / length;
-        
+
         for (i = 0; i < 16; i++) {
             matrix[i] = 0.0;
         }
-        
+
         matrix[15] = 1.0;
-        
+
         for (i = 0; i < 3; i++) {
             matrix[i * 4 + (i + 1) % 3] = u[(i + 2) % 3] * s;
             matrix[i * 4 + (i + 2) % 3] = -u[(i + 1) % 3] * s;
         }
-        
+
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 3; j++) {
                 matrix[i * 4 + j] += c1 * u[i] * u[j] + (i == j ? c : 0.0);
             }
         }
     }
-    
-    
+
+
     // Set the translation components of a 4x4 matrix
     void
     translatePoseMatrix(float x, float y, float z, float* matrix)
@@ -732,8 +737,8 @@ namespace VuforiaEAGLViewUtils
             matrix[15] += (matrix[3] * x + matrix[7] * y + matrix[11] * z);
         }
     }
-    
-    
+
+
     // Apply a rotation
     void
     rotatePoseMatrix(float angle, float x, float y, float z,
@@ -742,13 +747,13 @@ namespace VuforiaEAGLViewUtils
         if (matrix) {
             float rotate_matrix[16];
             setRotationMatrix(angle, x, y, z, rotate_matrix);
-            
+
             // matrix * scale_matrix
             multiplyMatrix(matrix, rotate_matrix, matrix);
         }
     }
-    
-    
+
+
     // Apply a scaling transformation
     void
     scalePoseMatrix(float x, float y, float z, float* matrix)
@@ -759,42 +764,42 @@ namespace VuforiaEAGLViewUtils
             matrix[1]  *= x;
             matrix[2]  *= x;
             matrix[3]  *= x;
-            
+
             matrix[4]  *= y;
             matrix[5]  *= y;
             matrix[6]  *= y;
             matrix[7]  *= y;
-            
+
             matrix[8]  *= z;
             matrix[9]  *= z;
             matrix[10] *= z;
             matrix[11] *= z;
         }
     }
-    
-    
+
+
     // Multiply the two matrices A and B and write the result to C
     void
     multiplyMatrix(float *matrixA, float *matrixB, float *matrixC)
     {
         int i, j, k;
         float aTmp[16];
-        
+
         for (i = 0; i < 4; i++) {
             for (j = 0; j < 4; j++) {
                 aTmp[j * 4 + i] = 0.0;
-                
+
                 for (k = 0; k < 4; k++) {
                     aTmp[j * 4 + i] += matrixA[k * 4 + i] * matrixB[j * 4 + k];
                 }
             }
         }
-        
+
         for (i = 0; i < 16; i++) {
             matrixC[i] = aTmp[i];
         }
     }
-    
+
     void
     setOrthoMatrix(float nLeft, float nRight, float nBottom, float nTop,
                    float nNear, float nFar, float *nProjMatrix)
@@ -804,11 +809,11 @@ namespace VuforiaEAGLViewUtils
             //         arLogMessage(AR_LOG_LEVEL_ERROR, "PLShadersExample", "Orthographic projection matrix pointer is NULL");
             return;
         }
-        
+
         int i;
         for (i = 0; i < 16; i++)
             nProjMatrix[i] = 0.0f;
-        
+
         nProjMatrix[0] = 2.0f / (nRight - nLeft);
         nProjMatrix[5] = 2.0f / (nTop - nBottom);
         nProjMatrix[10] = 2.0f / (nNear - nFar);
@@ -817,99 +822,124 @@ namespace VuforiaEAGLViewUtils
         nProjMatrix[14] = (nFar + nNear) / (nFar - nNear);
         nProjMatrix[15] = 1.0f;
     }
-    
-    // Transforms a screen pixel to a pixel onto the camera image,
-    // taking into account e.g. cropping of camera image to fit different aspect ratio screen.
-    // for the camera dimensions, the width is always bigger than the height (always landscape orientation)
-    // Top left of screen/camera is origin
-    void
-    screenCoordToCameraCoord(int screenX, int screenY, int screenDX, int screenDY,
-                             int screenWidth, int screenHeight, int cameraWidth, int cameraHeight,
-                             int * cameraX, int* cameraY, int * cameraDX, int * cameraDY)
+
+    Vuforia::Matrix44F
+    identityMatrix()
     {
+        Vuforia::Matrix44F r;
         
-        printf("screenCoordToCameraCoord:%d,%d %d,%d, %d,%d, %d,%d",screenX, screenY, screenDX, screenDY,
-               screenWidth, screenHeight, cameraWidth, cameraHeight );
+        for (int i = 0; i < 16; i++)
+            r.data[i] = 0.0f;
         
+        r.data[0] = 1.0f;
+        r.data[5] = 1.0f;
+        r.data[10] = 1.0f;
+        r.data[15] = 1.0f;
         
-        bool isPortraitMode = (screenWidth < screenHeight);
-        float videoWidth, videoHeight;
-        videoWidth = (float)cameraWidth;
-        videoHeight = (float)cameraHeight;
-        if (isPortraitMode)
-        {
-            // the width and height of the camera are always
-            // based on a landscape orientation
-            // videoWidth = (float)cameraHeight;
-            // videoHeight = (float)cameraWidth;
-            
-            
-            // as the camera coordinates are always in landscape
-            // we convert the inputs into a landscape based coordinate system
-            int tmp = screenX;
-            screenX = screenY;
-            screenY = screenWidth - tmp;
-            
-            tmp = screenDX;
-            screenDX = screenDY;
-            screenDY = tmp;
-            
-            tmp = screenWidth;
-            screenWidth = screenHeight;
-            screenHeight = tmp;
-            
-        }
-        else
-        {
-            videoWidth = (float)cameraWidth;
-            videoHeight = (float)cameraHeight;
-        }
-        
-        float videoAspectRatio = videoHeight / videoWidth;
-        float screenAspectRatio = (float) screenHeight / (float) screenWidth;
-        
-        float scaledUpX;
-        float scaledUpY;
-        float scaledUpVideoWidth;
-        float scaledUpVideoHeight;
-        
-        if (videoAspectRatio < screenAspectRatio)
-        {
-            // the video height will fit in the screen height
-            scaledUpVideoWidth = (float)screenHeight / videoAspectRatio;
-            scaledUpVideoHeight = screenHeight;
-            scaledUpX = (float)screenX + ((scaledUpVideoWidth - (float)screenWidth) / 2.0f);
-            scaledUpY = (float)screenY;
-        }
-        else
-        {
-            // the video width will fit in the screen width
-            scaledUpVideoHeight = (float)screenWidth * videoAspectRatio;
-            scaledUpVideoWidth = screenWidth;
-            scaledUpY = (float)screenY + ((scaledUpVideoHeight - (float)screenHeight)/2.0f);
-            scaledUpX = (float)screenX;
-        }
-        
-        if (cameraX)
-        {
-            *cameraX = (int)((scaledUpX / (float)scaledUpVideoWidth) * videoWidth);
-        }
-        
-        if (cameraY)
-        {
-            *cameraY = (int)((scaledUpY / (float)scaledUpVideoHeight) * videoHeight);
-        }
-        
-        if (cameraDX)
-        {
-            *cameraDX = (int)(((float)screenDX / (float)scaledUpVideoWidth) * videoWidth);
-        }
-        
-        if (cameraDY)
-        {
-            *cameraDY = (int)(((float)screenDY / (float)scaledUpVideoHeight) * videoHeight);
-        }
+        return r;
     }
-    
-    
+
+    Vuforia::Matrix44F
+    transposeMatrix(const Vuforia::Matrix44F& m)
+    {
+        Vuforia::Matrix44F r;
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                r.data[i*4+j] = m.data[i+4*j];
+        return r;
+    }
+
+    float
+    determinateMatrix(const Vuforia::Matrix44F& m)
+    {
+        return  m.data[12] * m.data[9] * m.data[6] * m.data[3] - m.data[8] * m.data[13] * m.data[6] * m.data[3] -
+        m.data[12] * m.data[5] * m.data[10] * m.data[3] + m.data[4] * m.data[13] * m.data[10] * m.data[3] +
+        m.data[8] * m.data[5] * m.data[14] * m.data[3] - m.data[4] * m.data[9] * m.data[14] * m.data[3] -
+        m.data[12] * m.data[9] * m.data[2] * m.data[7] + m.data[8] * m.data[13] * m.data[2] * m.data[7] +
+        m.data[12] * m.data[1] * m.data[10] * m.data[7] - m.data[0] * m.data[13] * m.data[10] * m.data[7] -
+        m.data[8] * m.data[1] * m.data[14] * m.data[7] + m.data[0] * m.data[9] * m.data[14] * m.data[7] +
+        m.data[12] * m.data[5] * m.data[2] * m.data[11] - m.data[4] * m.data[13] * m.data[2] * m.data[11] -
+        m.data[12] * m.data[1] * m.data[6] * m.data[11] + m.data[0] * m.data[13] * m.data[6] * m.data[11] +
+        m.data[4] * m.data[1] * m.data[14] * m.data[11] - m.data[0] * m.data[5] * m.data[14] * m.data[11] -
+        m.data[8] * m.data[5] * m.data[2] * m.data[15] + m.data[4] * m.data[9] * m.data[2] * m.data[15] +
+        m.data[8] * m.data[1] * m.data[6] * m.data[15] - m.data[0] * m.data[9] * m.data[6] * m.data[15] -
+        m.data[4] * m.data[1] * m.data[10] * m.data[15] + m.data[0] * m.data[5] * m.data[10] * m.data[15] ;
+    }
+
+    Vuforia::Matrix44F
+    inverseMatrix(const Vuforia::Matrix44F& m)
+    {
+        Vuforia::Matrix44F r;
+        
+        float det = 1.0f / determinateMatrix(m);
+        
+        r.data[0]   = m.data[6]*m.data[11]*m.data[13] - m.data[7]*m.data[10]*m.data[13]
+        + m.data[7]*m.data[9]*m.data[14] - m.data[5]*m.data[11]*m.data[14]
+        - m.data[6]*m.data[9]*m.data[15] + m.data[5]*m.data[10]*m.data[15];
+        
+        r.data[4]   = m.data[3]*m.data[10]*m.data[13] - m.data[2]*m.data[11]*m.data[13]
+        - m.data[3]*m.data[9]*m.data[14] + m.data[1]*m.data[11]*m.data[14]
+        + m.data[2]*m.data[9]*m.data[15] - m.data[1]*m.data[10]*m.data[15];
+        
+        r.data[8]   = m.data[2]*m.data[7]*m.data[13] - m.data[3]*m.data[6]*m.data[13]
+        + m.data[3]*m.data[5]*m.data[14] - m.data[1]*m.data[7]*m.data[14]
+        - m.data[2]*m.data[5]*m.data[15] + m.data[1]*m.data[6]*m.data[15];
+        
+        r.data[12]  = m.data[3]*m.data[6]*m.data[9] - m.data[2]*m.data[7]*m.data[9]
+        - m.data[3]*m.data[5]*m.data[10] + m.data[1]*m.data[7]*m.data[10]
+        + m.data[2]*m.data[5]*m.data[11] - m.data[1]*m.data[6]*m.data[11];
+        
+        r.data[1]   = m.data[7]*m.data[10]*m.data[12] - m.data[6]*m.data[11]*m.data[12]
+        - m.data[7]*m.data[8]*m.data[14] + m.data[4]*m.data[11]*m.data[14]
+        + m.data[6]*m.data[8]*m.data[15] - m.data[4]*m.data[10]*m.data[15];
+        
+        r.data[5]   = m.data[2]*m.data[11]*m.data[12] - m.data[3]*m.data[10]*m.data[12]
+        + m.data[3]*m.data[8]*m.data[14] - m.data[0]*m.data[11]*m.data[14]
+        - m.data[2]*m.data[8]*m.data[15] + m.data[0]*m.data[10]*m.data[15];
+        
+        r.data[9]   = m.data[3]*m.data[6]*m.data[12] - m.data[2]*m.data[7]*m.data[12]
+        - m.data[3]*m.data[4]*m.data[14] + m.data[0]*m.data[7]*m.data[14]
+        + m.data[2]*m.data[4]*m.data[15] - m.data[0]*m.data[6]*m.data[15];
+        
+        r.data[13]  = m.data[2]*m.data[7]*m.data[8] - m.data[3]*m.data[6]*m.data[8]
+        + m.data[3]*m.data[4]*m.data[10] - m.data[0]*m.data[7]*m.data[10]
+        - m.data[2]*m.data[4]*m.data[11] + m.data[0]*m.data[6]*m.data[11];
+        
+        r.data[2]   = m.data[5]*m.data[11]*m.data[12] - m.data[7]*m.data[9]*m.data[12]
+        + m.data[7]*m.data[8]*m.data[13] - m.data[4]*m.data[11]*m.data[13]
+        - m.data[5]*m.data[8]*m.data[15] + m.data[4]*m.data[9]*m.data[15];
+        
+        r.data[6]   = m.data[3]*m.data[9]*m.data[12] - m.data[1]*m.data[11]*m.data[12]
+        - m.data[3]*m.data[8]*m.data[13] + m.data[0]*m.data[11]*m.data[13]
+        + m.data[1]*m.data[8]*m.data[15] - m.data[0]*m.data[9]*m.data[15];
+        
+        r.data[10]  = m.data[1]*m.data[7]*m.data[12] - m.data[3]*m.data[5]*m.data[12]
+        + m.data[3]*m.data[4]*m.data[13] - m.data[0]*m.data[7]*m.data[13]
+        - m.data[1]*m.data[4]*m.data[15] + m.data[0]*m.data[5]*m.data[15];
+        
+        r.data[14]  = m.data[3]*m.data[5]*m.data[8] - m.data[1]*m.data[7]*m.data[8]
+        - m.data[3]*m.data[4]*m.data[9] + m.data[0]*m.data[7]*m.data[9]
+        + m.data[1]*m.data[4]*m.data[11] - m.data[0]*m.data[5]*m.data[11];
+        
+        r.data[3]   = m.data[6]*m.data[9]*m.data[12] - m.data[5]*m.data[10]*m.data[12]
+        - m.data[6]*m.data[8]*m.data[13] + m.data[4]*m.data[10]*m.data[13]
+        + m.data[5]*m.data[8]*m.data[14] - m.data[4]*m.data[9]*m.data[14];
+        
+        r.data[7]  = m.data[1]*m.data[10]*m.data[12] - m.data[2]*m.data[9]*m.data[12]
+        + m.data[2]*m.data[8]*m.data[13] - m.data[0]*m.data[10]*m.data[13]
+        - m.data[1]*m.data[8]*m.data[14] + m.data[0]*m.data[9]*m.data[14];
+        
+        r.data[11]  = m.data[2]*m.data[5]*m.data[12] - m.data[1]*m.data[6]*m.data[12]
+        - m.data[2]*m.data[4]*m.data[13] + m.data[0]*m.data[6]*m.data[13]
+        + m.data[1]*m.data[4]*m.data[14] - m.data[0]*m.data[5]*m.data[14];
+        
+        r.data[15]  = m.data[1]*m.data[6]*m.data[8] - m.data[2]*m.data[5]*m.data[8]
+        + m.data[2]*m.data[4]*m.data[9] - m.data[0]*m.data[6]*m.data[9]
+        - m.data[1]*m.data[4]*m.data[10] + m.data[0]*m.data[5]*m.data[10];
+        
+        for (int i = 0; i < 16; i++)
+            r.data[i] *= det;
+        
+        return r;
+    }
 }
