@@ -58,7 +58,6 @@ typedef NS_ENUM(NSInteger, VuforiaError) {
 @property (nonatomic, readonly)BOOL continuousAutofocusEnabled;
 @property (nonatomic, readonly)BOOL flashEnabled;
 @property (nonatomic, readonly)BOOL frontCameraEnabled;
-@property (nonatomic, readonly)CGRect viewport;
 @property (nonatomic, readonly)VuforiaEAGLView* eaglView;
 @property (nonatomic, readonly)BOOL isCameraStarted;
 

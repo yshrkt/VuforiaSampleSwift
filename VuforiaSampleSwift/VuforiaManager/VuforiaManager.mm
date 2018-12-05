@@ -79,12 +79,8 @@ namespace {
     BOOL _flashEnabled;
     BOOL _frontCameraEnabled;
     
-    CGRect _viewport;
-    
     VuforiaEAGLView* _eaglView;
 }
-
-@synthesize viewport = _viewport;
 
 - (instancetype)init {
     [NSException raise:NSGenericException
@@ -592,17 +588,10 @@ namespace {
         
     }
     
-    // Calculate the viewport for the app to use when rendering
-    _viewport.origin.x = ((viewWidth - config.mSize.data[0]) / 2) + config.mPosition.data[0];
-    _viewport.origin.y = (((int)(viewHeight - config.mSize.data[1])) / (int) 2) + config.mPosition.data[1];
-    _viewport.size.width = config.mSize.data[0];
-    _viewport.size.height = config.mSize.data[1];
-    
 #ifdef DEBUG_SAMPLE_APP
     NSLog(@"VideoBackgroundConfig: size: %d,%d", config.mSize.data[0], config.mSize.data[1]);
     NSLog(@"VideoMode:w=%d h=%d", videoMode.mWidth, videoMode.mHeight);
     NSLog(@"width=%7.3f height=%7.3f", viewWidth, viewHeight);
-    NSLog(@"ViewPort: X,Y: %0.1f,%0.1f Size X,Y:%0.1f,%0.1f", _viewport.origin.x, _viewport.origin.y, _viewport.size.width, _viewport.size.height);
 #endif
     
     // Set the config

@@ -393,10 +393,6 @@ namespace VuforiaEAGLViewUtils
         glFrontFace(GL_CW);  //Front camera
     else
         glFrontFace(GL_CCW);   //Back camera
-
-    // Set the viewport
-    glViewport((GLint)_manager.viewport.origin.x, (GLint)_manager.viewport.origin.y,
-               (GLsizei)_manager.viewport.size.width, (GLsizei)_manager.viewport.size.height);
     
     Vuforia::Matrix44F devicePoseMatrix = VuforiaEAGLViewUtils::identityMatrix();
     
@@ -529,8 +525,6 @@ namespace VuforiaEAGLViewUtils
     CGPoint pos = location;
     pos.x *= [[UIScreen mainScreen] nativeScale];
     pos.y *= [[UIScreen mainScreen] nativeScale];
-    pos.x = pos.x - _manager.viewport.origin.x;
-    pos.y = _manager.viewport.size.height + _manager.viewport.origin.y - pos.y;
     NSArray* results = [_renderer hitTest:pos options:nil];
     return [[results firstObject] node];
 }
