@@ -55,11 +55,9 @@ typedef NS_ENUM(NSInteger, VuforiaError) {
 
 @property (nonatomic, weak) id<VuforiaManagerDelegate> delegate;
 @property (nonatomic, readonly)BOOL isRetinaDisplay;
-@property (nonatomic, readonly)BOOL extendedTrackingEnabled;
 @property (nonatomic, readonly)BOOL continuousAutofocusEnabled;
 @property (nonatomic, readonly)BOOL flashEnabled;
 @property (nonatomic, readonly)BOOL frontCameraEnabled;
-@property (nonatomic, readonly)CGRect viewport;
 @property (nonatomic, readonly)VuforiaEAGLView* eaglView;
 @property (nonatomic, readonly)BOOL isCameraStarted;
 
@@ -71,7 +69,6 @@ typedef NS_ENUM(NSInteger, VuforiaError) {
 
 - (void)prepareWithOrientation:(UIInterfaceOrientation)orientation;
 
-- (BOOL)setExtendedTrackingEnabled:(BOOL)enabled;
 - (BOOL)setContinuousAutofocusEnabled:(BOOL)enabled;
 - (BOOL)setFlashEnabled:(BOOL)enabled;
 - (BOOL)setFrontCameraEnabled:(BOOL)enabled;

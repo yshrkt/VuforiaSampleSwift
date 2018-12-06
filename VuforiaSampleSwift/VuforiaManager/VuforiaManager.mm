@@ -37,11 +37,6 @@
 - (instancetype)initWithState:(Vuforia::State*)state;
 @end
 
-@interface VuforiaEAGLView ()
-- (void)setProjectionMatrix:(Vuforia::Matrix44F)matrix;
-@end
-
-
 namespace {
     // --- Data private to this unit ---
     
@@ -84,14 +79,8 @@ namespace {
     BOOL _flashEnabled;
     BOOL _frontCameraEnabled;
     
-    Vuforia::Matrix44F _projectionMatrix;
-    
-    CGRect _viewport;
-    
     VuforiaEAGLView* _eaglView;
 }
-
-@synthesize viewport = _viewport;
 
 - (instancetype)init {
     [NSException raise:NSGenericException
@@ -138,19 +127,6 @@ namespace {
         viewFrame.size.height *= [UIScreen mainScreen].nativeScale;
     }
     return viewFrame.size;
-}
-
-- (BOOL)extendedTrackingEnabled {
-    return _extendedTrackingEnabled;
-}
-
-- (BOOL)setExtendedTrackingEnabled:(BOOL)enabled {
-    BOOL result = [self setExtendedTrackingForDataSet:_dataSet start:enabled];
-    if (result) {
-        [_eaglView setOffTargetTrackingMode:enabled];
-    }
-    _extendedTrackingEnabled = enabled && result;
-    return result;
 }
 
 - (BOOL)continuousAutofocusEnabled {
@@ -453,11 +429,6 @@ namespace {
         }
     }
     
-    // we set the off target tracking mode to the current state
-    if (success) {
-        [self setExtendedTrackingForDataSet:_dataSet start:_extendedTrackingEnabled];
-    }
-    
     return success;
 }
 
@@ -470,9 +441,6 @@ namespace {
     }
     
     BOOL success = NO;
-    
-    // we deactivate the enhanced tracking
-    [self setExtendedTrackingForDataSet:theDataSet start:NO];
     
     // Get the image tracker:
     Vuforia::TrackerManager& trackerManager = Vuforia::TrackerManager::getInstance();
@@ -498,28 +466,6 @@ namespace {
     return success;
 }
 
-- (BOOL)setExtendedTrackingForDataSet:(Vuforia::DataSet *)theDataSet start:(BOOL) start {
-    BOOL result = YES;
-    for (int tIdx = 0; tIdx < theDataSet->getNumTrackables(); tIdx++) {
-        Vuforia::Trackable* trackable = theDataSet->getTrackable(tIdx);
-        if (start) {
-            if (!trackable->startExtendedTracking())
-            {
-                NSLog(@"Failed to start extended tracking on: %s", trackable->getName());
-                result = false;
-            }
-        } else {
-            if (!trackable->stopExtendedTracking())
-            {
-                NSLog(@"Failed to stop extended tracking on: %s", trackable->getName());
-                result = false;
-            }
-        }
-    }
-    return result;
-}
-
-
 // Configure Vuforia with the video background size
 - (void)configureVideoBackgroundWithViewWidth:(float)viewWidth andHeight:(float)viewHeight
 {
@@ -529,7 +475,6 @@ namespace {
     
     // Configure the video background
     Vuforia::VideoBackgroundConfig config;
-    config.mEnabled = true;
     config.mPosition.data[0] = 0.0f;
     config.mPosition.data[1] = 0.0f;
     
@@ -643,17 +588,10 @@ namespace {
         
     }
     
-    // Calculate the viewport for the app to use when rendering
-    _viewport.origin.x = ((viewWidth - config.mSize.data[0]) / 2) + config.mPosition.data[0];
-    _viewport.origin.y = (((int)(viewHeight - config.mSize.data[1])) / (int) 2) + config.mPosition.data[1];
-    _viewport.size.width = config.mSize.data[0];
-    _viewport.size.height = config.mSize.data[1];
-    
 #ifdef DEBUG_SAMPLE_APP
     NSLog(@"VideoBackgroundConfig: size: %d,%d", config.mSize.data[0], config.mSize.data[1]);
     NSLog(@"VideoMode:w=%d h=%d", videoMode.mWidth, videoMode.mHeight);
     NSLog(@"width=%7.3f height=%7.3f", viewWidth, viewHeight);
-    NSLog(@"ViewPort: X,Y: %0.1f,%0.1f Size X,Y:%0.1f,%0.1f", _viewport.origin.x, _viewport.origin.y, _viewport.size.width, _viewport.size.height);
 #endif
     
     // Set the config
@@ -718,12 +656,6 @@ namespace {
         return NO;
     }
     tracker->start();
-    
-    // Cache the projection matrix
-    const Vuforia::CameraCalibration& cameraCalibration = Vuforia::CameraDevice::getInstance().getCameraCalibration();
-    _projectionMatrix = Vuforia::Tool::getProjectionGL(cameraCalibration, 0.05f, 5000.0f);
-    
-    [_eaglView setProjectionMatrix:_projectionMatrix];
     
     return YES;
 }

@@ -47,6 +47,4 @@
 
 - (void)finishOpenGLESCommands;
 - (void)freeOpenGLESResources;
-
-- (void)setOffTargetTrackingMode:(BOOL) enabled;
 @end

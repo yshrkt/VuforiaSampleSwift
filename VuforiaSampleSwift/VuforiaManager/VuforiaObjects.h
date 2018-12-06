@@ -10,8 +10,8 @@
 
 typedef NS_ENUM(NSUInteger, VuforiaTrackableResultStatus) {
     VuforiaTrackableResultStatus_Unknown,            ///< The state of the TrackableResult is unknown
-    VuforiaTrackableResultStatus_Undefined,          ///< The state of the TrackableResult is not defined
-    ///< (this TrackableResult does not have a state)
+    VuforiaTrackableResultStatus_No_Pose,          ///<
+    VuforiaTrackableResultStatus_Limited,          ///<
     VuforiaTrackableResultStatus_Detected,           ///< The TrackableResult was detected
     VuforiaTrackableResultStatus_Tracked,            ///< The TrackableResult was tracked
     VuforiaTrackableResultStatus_Extended_tracked    ///< The Trackable Result was extended tracked
